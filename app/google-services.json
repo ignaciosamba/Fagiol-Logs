@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "727996694289",
+    "project_id": "fagiollogs",
+    "storage_bucket": "fagiollogs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727996694289:android:f5e9adc7fa70cfeb3756b0",
+        "android_client_info": {
+          "package_name": "com.sambas.fagiollogs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtMOMrh9W-zeEOpj6-aipxiwkjR8A6aiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
