@@ -9,7 +9,7 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.5"
 activityCompose = "1.9.2"
 composeBom = "2024.09.01"
-navigationCompose = "2.8.0"
+navigationCompose = "2.7.7"
 hilt = "2.51.1"
 hilt-navigation = "1.2.0"
 roomKtx = "2.6.1"
@@ -27,6 +27,12 @@ kotlin-test = "2.0.0"
 androidx-arch-core = "2.2.0"
 firebase = "33.3.0"
 javapoet = "1.13.0"
+firebaseAuthKtx = "23.0.0"
+google-auth-services = "21.2.0"
+facebook-auth = "16.0.0"
+firebaseFirestoreKtx = "25.1.0"
+lottie = "6.4.1"
+composeMaterial = "1.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,9 +66,15 @@ mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", versio
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin-test" }
 androidx-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidx-arch-core" }
-firebase-boom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase"}
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics"}
-javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javapoet"}
+firebase-boom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javapoet" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-auth-services" }
+facebook-auth = { group = "com.facebook.android", name = "facebook-login", version.ref = "facebook-auth" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

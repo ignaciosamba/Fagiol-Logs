@@ -25,6 +25,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        consumerProguardFiles "navigation-compose.pro"
     }
 
     buildTypes {
@@ -68,8 +69,14 @@ dependencies {
     implementation libs.compose.coil
     implementation libs.accompanist
     implementation libs.kotlin.stdlib
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    implementation libs.hilt.android
+    implementation libs.firebase.auth.ktx
+    implementation libs.facebook.auth
+    implementation libs.google.auth
+    implementation libs.firebase.firestore.ktx
+    implementation libs.androidx.compose.material
+    kapt libs.hilt.android.compiler
+    implementation libs.lottie.compose
     implementation libs.hilt.navigation.compose
     implementation libs.kotlin.serialization
     implementation libs.okhttp3

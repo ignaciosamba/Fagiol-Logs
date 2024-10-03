@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Fagiol Logs</string>
+
+    <!-- Login -->
+    <string name="default_web_client_id">727996694289-onin7iifroods4gpi183kq7mh7v0hl1l.apps.googleusercontent.com</string>
+
+    <!-- Core section -->
+    <string name="generic_error_title_fullscreen">Error</string>
+    <string name="generic_error_text_fullscreen">Oops! Something goes wrong. Retry in a few moments</string>
+    <string name="network_generic_error_title_fullscreen">Network Error</string>
+    <string name="network_generic_error_text_fullscreen">Oops! Something goes wrong. Retry in a few moments</string>
+    <string name="error_retry_button_text">Retry</string>
+
 </resources>

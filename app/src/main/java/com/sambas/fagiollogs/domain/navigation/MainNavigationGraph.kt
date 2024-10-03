@@ -23,8 +23,8 @@ internal interface MainNavigationGraph : NavigationNodeNew, AnimatedNavigationNo
         override val transition = VerticalTransition
     }
 
-    object LoadingScreenDestination :
-        NavDestinationWithArgs<LoadingScreenDestination.Args>(),
+    object LogInScreenDestination :
+        NavDestinationWithArgs<LogInScreenDestination.Args>(),
         MainNavigationGraph {
         override val transition = VerticalTransition
 

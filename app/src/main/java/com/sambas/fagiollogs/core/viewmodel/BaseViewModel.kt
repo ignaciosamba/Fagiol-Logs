@@ -1,23 +1,18 @@
-package com.example.pokemonbox.core.viewmodel
+package com.sambas.fagiollogs.core.viewmodel
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sambas.fagiollogs.core.design.BaseUiState
+import com.sambas.fagiollogs.core.design.loader.ScreenLoadingType
+import com.sambas.fagiollogs.core.design.scaffold.LoadingModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 interface UiEvent
-
-/**BaseUiState interface to use with every State (apply only for the one that are applied to VMs),
-* in order to set automatically the loading when launchNetworkCall is call.
- *
- * @property [isLoading] Boolean to set the loading in the state.
-**/
-interface BaseUiState {
-    val isLoading: Boolean
-}
 
 /**
  * Base view model, to be inherit in all the viewmodels and manage the emits/set the states and events.
@@ -34,7 +29,7 @@ abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
     initialState: S,
     private val stateKey: String = "viewModelState",
     private val useLoadingState: Boolean = true,
-    private val setLoadingState: (S, Boolean) -> S
+    private val loadingStateUpdater: (S, ScreenLoadingType) -> S = { newState, _ -> newState },
 ) : ViewModel() {
     private val _state = MutableStateFlow<S?>(savedStateHandle[stateKey] ?: initialState)
     val state: StateFlow<S> = _state.filterNotNull().stateIn(
@@ -43,18 +38,19 @@ abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
         initialValue = initialState
     )
 
+    /**
+     * The default [ScreenLoadingType] when executing actions.
+     */
+    public open val defaultLoadingType: ScreenLoadingType = ScreenLoadingType.VisibleAndCancellable
+
     private val _events = Channel<E>()
     val events = _events.receiveAsFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     protected fun setState(reduce: (S) -> S) {
         val currentState = _state.value
         if (currentState != null) {
             val newState = reduce(currentState)
             _state.update { newState }
-            savedStateHandle[stateKey] = newState
         }
     }
 
@@ -73,9 +69,9 @@ abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
         }
     }
 
-    private fun setLoading(loading: Boolean) {
+    private fun updateLoading(newLoadingType: ScreenLoadingType) {
         setState { currentState ->
-            setLoadingState(currentState, loading)
+            loadingStateUpdater(currentState, newLoadingType)
         }
     }
 
@@ -84,10 +80,11 @@ abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
         onSuccess: (T) -> Unit,
         onError: (Throwable) -> Unit = { },
         onNoConnection: () -> Unit = { },
-        useLoadingState: Boolean = this.useLoadingState
     ) {
         viewModelScope.launch {
-            if (useLoadingState) setLoading(true)
+            if (state.value.loadingModel != LoadingModel.disable) {
+                updateLoading(ScreenLoadingType.Visible)
+            }
             try {
                 val result = action()
                 onSuccess(result)
@@ -96,7 +93,9 @@ abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
             } catch (e: Exception) {
                 onError(e)
             } finally {
-                if (useLoadingState) setLoading(false)
+                if (state.value.loadingModel != LoadingModel.disable) {
+                    updateLoading(ScreenLoadingType.None)
+                }
             }
         }
     }
