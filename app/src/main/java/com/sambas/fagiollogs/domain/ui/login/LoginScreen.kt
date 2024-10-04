@@ -1,27 +1,32 @@
-package com.sambas.fagiollogs.domain.login
+package com.sambas.fagiollogs.domain.ui.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sambas.fagiollogs.R
 import com.sambas.fagiollogs.core.design.button.DesignButtons
 import com.sambas.fagiollogs.core.design.button.DesignImageButtons
+import com.sambas.fagiollogs.core.design.minicomponents.DividerWithText
 import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
+import com.sambas.fagiollogs.core.design.text.DesignText
 import com.sambas.fagiollogs.core.design.theme.DesignTheme
 import com.sambas.fagiollogs.core.design.theme.PreviewTheme
-import com.sambas.fagiollogs.core.design.theme.SpacerM
-import com.sambas.fagiollogs.core.design.theme.SpacerS
+import com.sambas.fagiollogs.core.design.theme.SpacerXS
+import com.sambas.fagiollogs.core.design.theme.SpacerXXXS
 
 @Composable
 fun LoginScreen(
@@ -29,27 +34,26 @@ fun LoginScreen(
     onLoginClick: (String, String) -> Unit,
     onLoginGoogleClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
-    onCreateAccountClick: () -> Unit
+    onCreateAccountClick: () -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit
 ) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
     BaseScaffold(
+        modifier = Modifier.fillMaxSize(),
         uiState = loginUiState,
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    horizontal = DesignTheme.spacing.space_m,
+                    horizontal = DesignTheme.spacing.space_xs,
                     vertical = DesignTheme.spacing.space_m
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
+            DesignText.titles.Medium(
                 text = "FAGIOL'S LOG",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
                 color = DesignTheme.colors.contentPrimary,
                 modifier = Modifier
                     .padding(
@@ -67,20 +71,21 @@ fun LoginScreen(
                 contentScale = ContentScale.Fit
             )
 
-            Text(
-                text = "LOGIN",
-                style = DesignTheme.typography.title_m,
-                fontWeight = FontWeight.Bold,
+            DesignText.titles.Medium(
+                text = "Track every feed\nCherish every nap",
+                textAlign = TextAlign.Center,
                 color = DesignTheme.colors.contentPrimary,
                 modifier = Modifier.padding(bottom = DesignTheme.spacing.space_m)
             )
 
             TextField(
-                value = username,
-                onValueChange = { username = it },
+                value = loginUiState.email,
+                onValueChange = {
+                    onEmailChange(it)
+                },
                 label = {
-                    Text(
-                        text = "Username",
+                    DesignText.body.Medium(
+                        text = "Email address",
                         color = DesignTheme.colors.contentSecondary
                     )
                 },
@@ -106,10 +111,12 @@ fun LoginScreen(
             )
 
             TextField(
-                value = password,
-                onValueChange = { password = it },
+                value = loginUiState.password,
+                onValueChange = {
+                    onPasswordChange(it)
+                },
                 label = {
-                    Text(
+                    DesignText.body.Medium(
                         text = "Password",
                         color = DesignTheme.colors.contentSecondary
                     )
@@ -125,7 +132,7 @@ fun LoginScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = DesignTheme.spacing.space_s),
+                    .padding(bottom = DesignTheme.spacing.space_xxs),
                 shape = RoundedCornerShape(16.dp),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = DesignTheme.colors.backgroundPrimary,
@@ -136,12 +143,36 @@ fun LoginScreen(
                 )
             )
 
-            DesignButtons.primary.Medium(
-                text = "Login",
-                onClick = { onLoginClick(username, password) },
+            DesignText.body.Small(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        bottom = DesignTheme.spacing.space_s,
+                        end = DesignTheme.spacing.space_mini
+                    )
+                    .clickable {
+                        onForgotPasswordClick()
+                    },
+                textAlign = TextAlign.End,
+                text = "Forgot Password?",
+                color = DesignTheme.colors.contentSecondary
             )
 
-            SpacerM()
+            DesignButtons.primary.Medium(
+                text = "Login",
+                onClick = {
+                    onLoginClick(
+                        loginUiState.email,
+                        loginUiState.password
+                    )
+                },
+            )
+
+            SpacerXS()
+
+            DividerWithText(text = "or")
+
+            SpacerXS()
 
             DesignImageButtons.ghost.Medium(
                 text = "Continue with Google",
@@ -150,30 +181,28 @@ fun LoginScreen(
                 onLoginGoogleClick()
             }
 
-            TextButton(
-                onClick = onForgotPasswordClick,
-                modifier = Modifier.padding(top = DesignTheme.spacing.space_xxs)
-            ) {
-                Text(
-                    "Forgot Password?",
-                    color = DesignTheme.colors.contentSecondary
-                )
-            }
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = DesignTheme.spacing.space_xs),
+                    .weight(1f)
+                    .padding(bottom = DesignTheme.spacing.space_m),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = CenterVertically
             ) {
-                Text(
-                    "Not Registered?",
-                    color = DesignTheme.colors.contentSecondary
-                )
-                TextButton(onClick = onCreateAccountClick) {
-                    Text("Create account", color = DesignTheme.colors.contentPrimary)
+                Box(contentAlignment = Center) {
+                    DesignText.body.Medium(
+                        text = "Not Registered?",
+                        color = DesignTheme.colors.contentSecondary
+                    )
                 }
+                SpacerXXXS()
+                DesignText.body.MediumBold(
+                    modifier = Modifier.clickable {
+                        onCreateAccountClick()
+                    },
+                    text = "Create an account",
+                    color = DesignTheme.colors.contentAction
+                )
             }
         }
     }
@@ -188,7 +217,9 @@ private fun LoginScreenPreview() {
             onLoginClick = { _, _ -> },
             onForgotPasswordClick = {},
             onLoginGoogleClick = {},
-            onCreateAccountClick = {}
+            onCreateAccountClick = {},
+            onPasswordChange = {},
+            onEmailChange = {}
         )
     }
 }

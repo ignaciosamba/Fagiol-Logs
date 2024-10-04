@@ -1,4 +1,4 @@
-package com.sambas.fagiollogs.domain.splash
+package com.sambas.fagiollogs.domain.ui.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -16,7 +16,7 @@ import com.sambas.fagiollogs.R
 import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
 import com.sambas.fagiollogs.core.design.theme.DesignTheme
 import com.sambas.fagiollogs.core.design.theme.PreviewTheme
-import com.sambas.fagiollogs.domain.login.LoginUiState
+import com.sambas.fagiollogs.domain.ui.login.LoginUiState
 
 @Composable
 fun SplashScreen(

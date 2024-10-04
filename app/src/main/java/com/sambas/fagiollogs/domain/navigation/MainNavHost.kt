@@ -8,25 +8,23 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.api.ApiException
 import com.sambas.fagiollogs.core.navigation.NavGraphBuilder
 import com.sambas.fagiollogs.core.navigation.composable
 import com.sambas.fagiollogs.core.navigation.navigate
 import com.sambas.fagiollogs.core.navigation.navigation
 import com.sambas.fagiollogs.core.navigation.rememberNavControllerWithLogger
-import com.sambas.fagiollogs.domain.login.LoginScreen
-import com.sambas.fagiollogs.domain.login.LoginUiEvent
-import com.sambas.fagiollogs.domain.login.LoginViewModel
-import com.sambas.fagiollogs.domain.splash.SplashScreen
-import kotlinx.coroutines.flow.collect
+import com.sambas.fagiollogs.domain.ui.login.LoginScreen
+import com.sambas.fagiollogs.domain.ui.login.LoginUiEvent
+import com.sambas.fagiollogs.domain.ui.login.LoginViewModel
+import com.sambas.fagiollogs.domain.ui.register.RegisterScreen
+import com.sambas.fagiollogs.domain.ui.register.RegisterViewModel
+import com.sambas.fagiollogs.domain.ui.splash.SplashScreen
 
 @Composable
 internal fun MainNavHost(
@@ -57,6 +55,14 @@ internal fun MainNavHost(
                             destination = destination,
                             navController = navController,
                             closeCallback = onClose
+                        )
+                    }
+
+                    is MainNavigationGraph.RegisterScreenDestination -> {
+                        registerScreen(
+                            destination = destination,
+                            navController = navController,
+                            onBackPressed = onBackPressed
                         )
                     }
                 }
@@ -93,12 +99,6 @@ private fun NavGraphBuilder.splashScreen(
                     }
 
                     LoginUiEvent.LoginSuccess -> { /*nothing to do here*/
-                    }
-
-                    is LoginUiEvent.RegistrationError -> { /*nothing to do here*/
-                    }
-
-                    LoginUiEvent.RegistrationSuccess -> { /*nothing to do here*/
                     }
 
                     LoginUiEvent.UserNotLoggedIn -> {
@@ -154,12 +154,7 @@ private fun NavGraphBuilder.loginScreen(
 
                     LoginUiEvent.LoginSuccess -> { /*nothing to do here*/ }
 
-                    is LoginUiEvent.RegistrationError -> { /*nothing to do here*/ }
-
-                    LoginUiEvent.RegistrationSuccess -> { /*nothing to do here*/ }
-
-                    LoginUiEvent.UserNotLoggedIn -> {
-                        /*nothing to do here*/ }
+                    LoginUiEvent.UserNotLoggedIn -> { /*nothing to do here*/ }
 
                     is LoginUiEvent.StartGoogleSignIn -> {
                         val intentSenderRequest = IntentSenderRequest.Builder(event.intentSender).build()
@@ -174,11 +169,40 @@ private fun NavGraphBuilder.loginScreen(
             onLoginClick = { userName, password ->
                 viewModel.loginUser(userName, password)
             },
-            onLoginGoogleClick = {
-                viewModel.initiateGoogleSignIn()
-            },
+            onLoginGoogleClick = viewModel::initiateGoogleSignIn,
             onForgotPasswordClick = {},
-            onCreateAccountClick = {}
+            onCreateAccountClick = {
+                navController.navigate(
+                    from = destination,
+                    navigationUri = MainNavigationGraph
+                        .RegisterScreenDestination.navigationUri(),
+                )
+            },
+            onPasswordChange = viewModel::onPasswordChanged,
+            onEmailChange = viewModel::onEmailChanged
+        )
+    }
+}
+
+private fun NavGraphBuilder.registerScreen(
+    destination: MainNavigationGraph.RegisterScreenDestination,
+    navController: NavController,
+    onBackPressed: () -> Unit
+) {
+    composable(destination) { navBackStackEntry ->
+        val context = LocalContext.current
+        val viewModel = hiltViewModel<RegisterViewModel>()
+        val state = viewModel.state.collectAsStateWithLifecycle()
+
+        RegisterScreen(
+            modifier = Modifier,
+            registerUiState = state.value,
+            onUserNameChange = viewModel::onNameChanged,
+            onEmailChange = viewModel::onEmailChanged,
+            onPasswordChange = viewModel::onPasswordChanged,
+            onPasswordRepeatedChange = viewModel::onPasswordRepeatedChange,
+            onRegisterClick = viewModel::registerUser,
+            onBackPressed = onBackPressed
         )
     }
 }

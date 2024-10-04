@@ -1,4 +1,4 @@
-package com.sambas.fagiollogs.domain.login
+package com.sambas.fagiollogs.domain.ui.login
 
 import com.sambas.fagiollogs.core.design.BaseUiState
 import com.sambas.fagiollogs.core.design.dialog.DialogBase

@@ -1,4 +1,4 @@
-package com.sambas.fagiollogs.domain.login
+package com.sambas.fagiollogs.domain.ui.login
 
 import android.content.Context
 import android.util.Log
@@ -50,20 +50,6 @@ class LoginViewModel @Inject constructor(
             },
             onNoConnection = {
                 onNewError(SnackbarGenericErrorBuilder)
-            }
-        )
-    }
-
-    fun registerUser(email: String, password: String) {
-        launchNetworkCall(
-            action = { auth.createUserWithEmailAndPassword(email, password).await() },
-            onSuccess = { emitEvent(LoginUiEvent.RegistrationSuccess) },
-            onError = {
-                emitEvent(
-                    LoginUiEvent.RegistrationError(
-                        it.message ?: "Registration failed"
-                    )
-                )
             }
         )
     }
@@ -128,13 +114,24 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    private fun checkUserLoggedIn() {
-        val currentUser = auth.currentUser
+    fun onPasswordChanged(password: String) {
         setState {
-            it.copy(
-                email = "sfas"
+            state.value.copy(
+                password = password
             )
         }
+    }
+
+    fun onEmailChanged(email: String) {
+        setState {
+            state.value.copy(
+                email = email
+            )
+        }
+    }
+
+    private fun checkUserLoggedIn() {
+        val currentUser = auth.currentUser
         if (currentUser != null) {
             emitEvent(LoginUiEvent.UserAlreadyLoggedIn)
         } else {
@@ -143,7 +140,7 @@ class LoginViewModel @Inject constructor(
     }
 
     /**
-     * Method to set in the [SkiInsuranceArchiveState] a new Error to be shown by the [TelepassScaffold]
+     * Method to set in the [LoginScreen] a new Error to be shown by the [TelepassScaffold]
      *
      */
     private fun onNewError(errorMessage: SnackbarError.Builder) {
