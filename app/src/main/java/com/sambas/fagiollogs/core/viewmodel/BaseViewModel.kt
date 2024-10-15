@@ -1,6 +1,5 @@
 package com.sambas.fagiollogs.core.viewmodel
 
-import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,8 +20,6 @@ interface UiEvent
  * @param [initialState] [BaseUiState] class with the state information at the first moment.
  * @property [stateKey] String used as default or state name key for the get/set state on the [savedStateHandle]
  * @property [useLoadingState] Boolean use to disable or not use the loading feature.
- * @property [setLoadingState] Lambda to pass the loading Boolean from the state, and automatically set when
- * the launchNetworkCall is running.
  */
 abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
     private val savedStateHandle: SavedStateHandle,
@@ -41,7 +38,7 @@ abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
     /**
      * The default [ScreenLoadingType] when executing actions.
      */
-    public open val defaultLoadingType: ScreenLoadingType = ScreenLoadingType.VisibleAndCancellable
+    open val defaultLoadingType: ScreenLoadingType = ScreenLoadingType.VisibleAndCancellable
 
     private val _events = Channel<E>()
     val events = _events.receiveAsFlow()
@@ -54,7 +51,7 @@ abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
         }
     }
 
-    protected fun <T> emitState(stateField: (S) -> T): StateFlow<T>? {
+    protected fun <T> emitState(stateField: (S) -> T): StateFlow<T> {
         return state.map { stateField(it) }
             .stateIn(
                 scope = viewModelScope,
@@ -63,7 +60,7 @@ abstract class BaseViewModel<S : BaseUiState, E : UiEvent>(
             )
     }
 
-    protected fun emitEvent(event: E) {
+    fun emitEvent(event: E) {
         viewModelScope.launch {
             _events.send(event)
         }

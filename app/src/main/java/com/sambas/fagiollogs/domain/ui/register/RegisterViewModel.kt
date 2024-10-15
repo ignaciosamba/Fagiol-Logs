@@ -32,6 +32,7 @@ class RegisterViewModel @Inject constructor(
                 }
                 // Register the user and password.
                 val result = auth.createUserWithEmailAndPassword(email, password).await()
+                // Update the user's profile with the provided name.
                 val profileUpdate = UserProfileChangeRequest.Builder()
                     .setDisplayName(name)
                     .build()
@@ -86,7 +87,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     /**
-     * Method to set in the [RegisterScreen] a new Error to be shown by the [TelepassScaffold]
+     * Method to set in the [RegisterScreen] a new Error to be shown by the [BaseScaffold]
      *
      */
     private fun onNewError(errorMessage: SnackbarError.Builder) {

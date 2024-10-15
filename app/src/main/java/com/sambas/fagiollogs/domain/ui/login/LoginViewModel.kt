@@ -1,13 +1,9 @@
 package com.sambas.fagiollogs.domain.ui.login
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.facebook.AccessToken
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -17,6 +13,7 @@ import com.sambas.fagiollogs.core.design.error.ErrorBase
 import com.sambas.fagiollogs.core.design.error.SnackbarError
 import com.sambas.fagiollogs.core.design.error.SnackbarGenericErrorBuilder
 import com.sambas.fagiollogs.core.design.loader.toLoadingModel
+import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
 import com.sambas.fagiollogs.core.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -44,8 +41,7 @@ class LoginViewModel @Inject constructor(
         launchNetworkCall(
             action = { auth.signInWithEmailAndPassword(email, password).await() },
             onSuccess = { emitEvent(LoginUiEvent.LoginSuccess) },
-            onError = { error ->
-                Log.d("samba1", "error: ${error.message}")
+            onError = {
                 onNewError(SnackbarGenericErrorBuilder)
             },
             onNoConnection = {
@@ -68,7 +64,9 @@ class LoginViewModel @Inject constructor(
                 val result = oneTapClient.beginSignIn(signInRequest).await()
                 emitEvent(LoginUiEvent.StartGoogleSignIn(result.pendingIntent.intentSender))
             },
-            onSuccess = { /*nothing to do here*/ },
+            onSuccess = {
+                emitEvent(LoginUiEvent.LoginSuccess)
+            },
             onError = { e ->
                 emitEvent(LoginUiEvent.LoginError("Couldn't start Google Sign In: ${e.message}")) }
         )
@@ -82,35 +80,6 @@ class LoginViewModel @Inject constructor(
             },
             onSuccess = { emitEvent(LoginUiEvent.LoginSuccess) },
             onError = { e -> emitEvent(LoginUiEvent.LoginError("Google sign-in failed: ${e.message}")) }
-        )
-    }
-
-
-    fun signInWithGoogle(account: GoogleSignInAccount) {
-        launchNetworkCall(
-            action = {
-                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential).await()
-            },
-            onSuccess = { emitEvent(LoginUiEvent.LoginSuccess) },
-            onError = { emitEvent(LoginUiEvent.LoginError(it.message ?: "Google sign-in failed")) }
-        )
-    }
-
-    fun signInWithFacebook(token: AccessToken) {
-        launchNetworkCall(
-            action = {
-                val credential = FacebookAuthProvider.getCredential(token.token)
-                auth.signInWithCredential(credential).await()
-            },
-            onSuccess = { emitEvent(LoginUiEvent.LoginSuccess) },
-            onError = {
-                emitEvent(
-                    LoginUiEvent.LoginError(
-                        it.message ?: "Facebook sign-in failed"
-                    )
-                )
-            }
         )
     }
 
@@ -140,7 +109,7 @@ class LoginViewModel @Inject constructor(
     }
 
     /**
-     * Method to set in the [LoginScreen] a new Error to be shown by the [TelepassScaffold]
+     * Method to set in the [LoginScreen] a new Error to be shown by the [BaseScaffold]
      *
      */
     private fun onNewError(errorMessage: SnackbarError.Builder) {
