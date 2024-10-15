@@ -1,4 +1,4 @@
-# Newborn Event Tracker
+# Newborn Event Tracker App
 
 An Android application designed to help parents track important events and metrics for their newborns.
 
