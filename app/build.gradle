@@ -71,11 +71,13 @@ dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.hilt.android
     implementation libs.firebase.auth.ktx
+    implementation libs.firebase.ui.auth
     implementation libs.facebook.auth
     implementation libs.google.auth
     implementation libs.firebase.firestore.ktx
     implementation libs.androidx.compose.material
     implementation libs.androidx.lifecycle.process
+    implementation libs.googleid
     kapt libs.hilt.android.compiler
     implementation libs.lottie.compose
     implementation libs.hilt.navigation.compose

@@ -1,6 +1,9 @@
 package com.sambas.fagiollogs.domain.ui.login
 
 import android.content.Context
+import androidx.credentials.CredentialManager
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -31,6 +34,7 @@ class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val auth: FirebaseAuth,
     authManager: AuthManager,
+    private val googleSignInHelper: GoogleSignInHelper,
     savedStateHandle: SavedStateHandle
 ) : AuthenticationBaseViewModel<LoginUiState, LoginUiEvent>(
     savedStateHandle = savedStateHandle,
@@ -40,6 +44,7 @@ class LoginViewModel @Inject constructor(
 ) {
 
     private val oneTapClient: SignInClient = Identity.getSignInClient(context)
+    private val credentialManager: CredentialManager = CredentialManager.create(context)
 
     init {
         checkUserLoggedIn()
@@ -61,43 +66,43 @@ class LoginViewModel @Inject constructor(
     fun initiateGoogleSignIn() {
         launchAuthenticationNetworkCall(
             action = {
-                val signInRequest = BeginSignInRequest.builder()
-                    .setGoogleIdTokenRequestOptions(
-                        BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                            .setSupported(true)
-                            .setServerClientId(context.getString(R.string.default_web_client_id))
-                            .setFilterByAuthorizedAccounts(false)
-                            .build()
-                    )
-                    .build()
-                val result = oneTapClient.beginSignIn(signInRequest).await()
-                emitEvent(LoginUiEvent.StartGoogleSignIn(result.pendingIntent.intentSender))
-            },
-            onSuccess = {
+                // Get the credential using Credential Manager
+                val googleCredential = googleSignInHelper.initiateGoogleSignIn(
+                    clientId = "${context.getString(R.string.gcm_defaultSenderId)}-bamh93m5u9uao71svs4g16ansghe63vk.apps.googleusercontent.com"
+                )
 
-            },
-            onError = { e ->
-                emitEvent(LoginUiEvent.LoginError("Couldn't start Google Sign In: ${e.message}"))
-            },
-            loadingType = ScreenLoadingType.None
-        )
-    }
+                // Create Firebase credential
+                val firebaseCredential = GoogleAuthProvider.getCredential(
+                    googleCredential.idToken, null
+                )
 
-    fun handleGoogleSignInResult(credential: SignInCredential) {
-        launchAuthenticationNetworkCall(
-            action = {
-                val firebaseCredential =
-                    GoogleAuthProvider.getCredential(credential.googleIdToken, null)
+                // Sign in to Firebase
                 auth.signInWithCredential(firebaseCredential).await()
             },
             onSuccess = {
                 emitEvent(LoginUiEvent.LoginSuccess)
             },
             onError = { e ->
-                emitEvent(LoginUiEvent.LoginError("Google sign-in failed: ${e.message}"))
-            }
+                when (e) {
+                    is GetCredentialCancellationException -> {
+                        // User canceled the operation
+                        emitEvent(LoginUiEvent.LoginError("Google Sign-in canceled"))
+                    }
+
+                    is NoCredentialException -> {
+                        // No credentials available
+                        emitEvent(LoginUiEvent.LoginError("No Google accounts found"))
+                    }
+
+                    else -> {
+                        emitEvent(LoginUiEvent.LoginError("Google sign-in failed: ${e.message}"))
+                    }
+                }
+            },
+            loadingType = ScreenLoadingType.None
         )
     }
+
 
     fun onPasswordChanged(password: String) {
         setState {

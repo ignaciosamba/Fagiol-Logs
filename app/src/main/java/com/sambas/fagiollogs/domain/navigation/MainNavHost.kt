@@ -133,10 +133,6 @@ private fun NavGraphBuilder.splashScreen(
                                 .LogInScreenDestination.navigationUri(loginArgs),
                         )
                     }
-
-                    is LoginUiEvent.StartGoogleSignIn -> {
-                        //nothing here.
-                    }
                 }
             }
         }
@@ -154,20 +150,6 @@ private fun NavGraphBuilder.loginScreen(
         val context = LocalContext.current
         val viewModel = hiltViewModel<LoginViewModel>()
         val state = viewModel.state.collectAsStateWithLifecycle()
-
-        val launcher = rememberLauncherForActivityResult(
-            ActivityResultContracts.StartIntentSenderForResult()
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                try {
-                    val credential =
-                        Identity.getSignInClient(context).getSignInCredentialFromIntent(result.data)
-                    viewModel.handleGoogleSignInResult(credential)
-                } catch (e: Exception) {
-                    viewModel.emitEvent(LoginUiEvent.LoginError("Google Sign In failed: ${e.message}"))
-                }
-            }
-        }
 
         LaunchedEffect(viewModel) {
             viewModel.events.collect { event ->
@@ -199,12 +181,6 @@ private fun NavGraphBuilder.loginScreen(
                                 }
                             }
                         )
-                    }
-
-                    is LoginUiEvent.StartGoogleSignIn -> {
-                        val intentSenderRequest =
-                            IntentSenderRequest.Builder(event.intentSender).build()
-                        launcher.launch(intentSenderRequest)
                     }
 
                     LoginUiEvent.UserNotLoggedIn -> { /*nothing to do here*/
