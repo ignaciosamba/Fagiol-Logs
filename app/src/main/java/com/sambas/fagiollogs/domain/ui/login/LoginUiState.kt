@@ -9,6 +9,7 @@ import com.sambas.fagiollogs.core.design.snackbar.SnackBarGeneric
 data class LoginUiState(
     val email: String = "",
     val password: String = "",
+    val emailError: Boolean = false,
     override val loadingModel: LoadingModel = LoadingModel.disable,
     override val error: ErrorBase? = null,
     override val message: SnackBarGeneric? = null,

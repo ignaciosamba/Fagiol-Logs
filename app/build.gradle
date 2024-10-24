@@ -75,6 +75,7 @@ dependencies {
     implementation libs.google.auth
     implementation libs.firebase.firestore.ktx
     implementation libs.androidx.compose.material
+    implementation libs.androidx.lifecycle.process
     kapt libs.hilt.android.compiler
     implementation libs.lottie.compose
     implementation libs.hilt.navigation.compose

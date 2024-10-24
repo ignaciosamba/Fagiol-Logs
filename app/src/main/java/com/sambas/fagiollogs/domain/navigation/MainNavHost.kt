@@ -100,7 +100,7 @@ private fun NavGraphBuilder.splashScreen(
                             navigationUri = MainNavigationGraph
                                 .LandingScreenDestination.navigationUri(),
                             navOptions = navOptions {
-                                popUpTo(MainNavigationGraph.SplashScreenDestination){
+                                popUpTo(MainNavigationGraph.SplashScreenDestination) {
                                     inclusive = true
                                 }
                             }
@@ -116,7 +116,7 @@ private fun NavGraphBuilder.splashScreen(
                             navigationUri = MainNavigationGraph
                                 .LandingScreenDestination.navigationUri(),
                             navOptions = navOptions {
-                                popUpTo(MainNavigationGraph.SplashScreenDestination){
+                                popUpTo(MainNavigationGraph.SplashScreenDestination) {
                                     inclusive = true
                                 }
                             }
@@ -155,10 +155,13 @@ private fun NavGraphBuilder.loginScreen(
         val viewModel = hiltViewModel<LoginViewModel>()
         val state = viewModel.state.collectAsStateWithLifecycle()
 
-        val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        val launcher = rememberLauncherForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
-                    val credential = Identity.getSignInClient(context).getSignInCredentialFromIntent(result.data)
+                    val credential =
+                        Identity.getSignInClient(context).getSignInCredentialFromIntent(result.data)
                     viewModel.handleGoogleSignInResult(credential)
                 } catch (e: Exception) {
                     viewModel.emitEvent(LoginUiEvent.LoginError("Google Sign In failed: ${e.message}"))
@@ -175,14 +178,15 @@ private fun NavGraphBuilder.loginScreen(
                             navigationUri = MainNavigationGraph
                                 .LandingScreenDestination.navigationUri(),
                             navOptions = navOptions {
-                                popUpTo(MainNavigationGraph.LogInScreenDestination){
+                                popUpTo(MainNavigationGraph.LogInScreenDestination) {
                                     inclusive = true
                                 }
                             }
                         )
                     }
 
-                    is LoginUiEvent.LoginError -> { /*nothing to do here*/ }
+                    is LoginUiEvent.LoginError -> { /*nothing to do here*/
+                    }
 
                     LoginUiEvent.LoginSuccess -> {
                         navController.navigate(
@@ -190,7 +194,7 @@ private fun NavGraphBuilder.loginScreen(
                             navigationUri = MainNavigationGraph
                                 .LandingScreenDestination.navigationUri(),
                             navOptions = navOptions {
-                                popUpTo(MainNavigationGraph.LogInScreenDestination){
+                                popUpTo(MainNavigationGraph.LogInScreenDestination) {
                                     inclusive = true
                                 }
                             }
@@ -198,11 +202,13 @@ private fun NavGraphBuilder.loginScreen(
                     }
 
                     is LoginUiEvent.StartGoogleSignIn -> {
-                        val intentSenderRequest = IntentSenderRequest.Builder(event.intentSender).build()
+                        val intentSenderRequest =
+                            IntentSenderRequest.Builder(event.intentSender).build()
                         launcher.launch(intentSenderRequest)
                     }
 
-                    LoginUiEvent.UserNotLoggedIn -> { /*nothing to do here*/ }
+                    LoginUiEvent.UserNotLoggedIn -> { /*nothing to do here*/
+                    }
                 }
             }
         }
@@ -244,6 +250,9 @@ private fun NavGraphBuilder.registerScreen(
             onPasswordChange = viewModel::onPasswordChanged,
             onPasswordRepeatedChange = viewModel::onPasswordRepeatedChange,
             onRegisterClick = viewModel::registerUser,
+            onShowPasswordText = viewModel::onShowPasswordText,
+            onShowRepeatedPasswordText = viewModel::onShowRepeatedPasswordText,
+            onValidateRepeatedPassword = viewModel::onValidateRepeatedPassword,
             onBackPressed = onBackPressed
         )
     }

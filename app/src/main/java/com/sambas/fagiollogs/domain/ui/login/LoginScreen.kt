@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,7 +65,7 @@ fun LoginScreen(
 
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "Login Illustration",
+                contentDescription ="Login Illustration",
                 modifier = Modifier
                     .size(180.dp)
                     .padding(DesignTheme.spacing.space_xs),
@@ -72,7 +73,7 @@ fun LoginScreen(
             )
 
             DesignText.titles.Medium(
-                text = "Track every feed\nCherish every nap",
+                text = stringResource(id = R.string.login_title),
                 textAlign = TextAlign.Center,
                 color = DesignTheme.colors.contentPrimary,
                 modifier = Modifier.padding(bottom = DesignTheme.spacing.space_m)
@@ -117,7 +118,7 @@ fun LoginScreen(
                 },
                 label = {
                     DesignText.body.Medium(
-                        text = "Password",
+                        text = stringResource(R.string.password_label),
                         color = DesignTheme.colors.contentSecondary
                     )
                 },
@@ -154,12 +155,12 @@ fun LoginScreen(
                         onForgotPasswordClick()
                     },
                 textAlign = TextAlign.End,
-                text = "Forgot Password?",
+                text = stringResource(R.string.forgot_password_text),
                 color = DesignTheme.colors.contentSecondary
             )
 
             DesignButtons.primary.Medium(
-                text = "Login",
+                text = stringResource(R.string.login_button),
                 onClick = {
                     onLoginClick(
                         loginUiState.email,
@@ -175,7 +176,7 @@ fun LoginScreen(
             SpacerXS()
 
             DesignImageButtons.ghost.Medium(
-                text = "Continue with Google",
+                text = stringResource(R.string.continue_with_google_button),
                 painter = painterResource(id = R.drawable.google_ic)
             ) {
                 onLoginGoogleClick()
@@ -191,7 +192,7 @@ fun LoginScreen(
             ) {
                 Box(contentAlignment = Center) {
                     DesignText.body.Medium(
-                        text = "Not Registered?",
+                        text = stringResource(R.string.not_already_registered),
                         color = DesignTheme.colors.contentSecondary
                     )
                 }
@@ -200,7 +201,7 @@ fun LoginScreen(
                     modifier = Modifier.clickable {
                         onCreateAccountClick()
                     },
-                    text = "Create an account",
+                    text = stringResource(R.string.create_account),
                     color = DesignTheme.colors.contentAction
                 )
             }

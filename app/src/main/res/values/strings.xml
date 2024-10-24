@@ -1,17 +1,30 @@
 <resources>
     <string name="app_name">Fagiol Logs</string>
 
-    <!-- Login -->
-    <string name="default_web_client_id">727996694289-onin7iifroods4gpi183kq7mh7v0hl1l.apps.googleusercontent.com</string>
-
-    <!-- Register -->
-    <string name="not_matching_password_error">The passwords do not match</string>
-
     <!-- Core section -->
     <string name="generic_error_title_fullscreen">Error</string>
     <string name="generic_error_text_fullscreen">Oops! Something goes wrong. Retry in a few moments</string>
     <string name="network_generic_error_title_fullscreen">Network Error</string>
     <string name="network_generic_error_text_fullscreen">Oops! Something goes wrong. Retry in a few moments</string>
     <string name="error_retry_button_text">Retry</string>
+    <string name="default_web_client_id">727996694289-bamh93m5u9uao71svs4g16ansghe63vk.apps.googleusercontent.com</string>
+
+    <!-- Login -->
+    <string name="login_title">Track every feed\nCherish every nap</string>
+    <string name="password_label">Password</string>
+    <string name="forgot_password_text">Forgot Password?</string>
+    <string name="login_button">Login</string>
+    <string name="continue_with_google_button">Continue with Google</string>
+    <string name="not_already_registered">Not Registered?</string>
+    <string name="create_account">Create an account</string>
+
+    <!-- Register -->
+    <string name="not_matching_password_error">The passwords do not match</string>
+    <string name="email_not_valid_error">The email is not valid</string>
+    <string name="password_not_valid_error">The password is not compliant</string>
+    <string name="disclaimer_password">Your password must include at least:\n• 8 characters\n• One lowercase letter\n• One uppercase letter\n• One number\n• One special character</string>
+
+
+
 
 </resources>

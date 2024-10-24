@@ -22,8 +22,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.sambas.fagiollogs.core.design.BaseUiState
+import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
+import com.sambas.fagiollogs.core.design.scaffold.LoadingModel
+import com.sambas.fagiollogs.core.design.theme.DesignTheme
+import com.sambas.fagiollogs.core.design.theme.PreviewTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
@@ -36,7 +43,10 @@ internal fun Loader() {
     FagiolsLoader(
         loaderAnimation = rememberFagiolsLoaderAnimation(),
         modifier = Modifier
-            .padding(9.dp)
+            .pointerInput(Unit) {
+                // Block the user touches
+            }
+            .padding(DesignTheme.spacing.space_m)
             .size(64.dp),
     )
 }
@@ -100,7 +110,7 @@ private val fagiolsColors = listOf(
 @Composable
 private fun rememberFagiolsLoaderAnimation(
     colors: List<Color> = fagiolsColors,
-    arcWidth: Dp = 5.dp,
+    arcWidth: Dp = 8.dp,
     duration: Int = 1280,
 ): LoaderAnimation {
     val arcAnimations = remember {
@@ -206,3 +216,12 @@ private inline fun InfiniteAnimation(crossinline animation: suspend CoroutineSco
 private object FixedMotionDurationScale : MotionDurationScale {
     override val scaleFactor: Float = 1f
 }
+
+@Preview
+@Composable
+private fun LoaderPreview() {
+    PreviewTheme(true){
+        Loader()
+    }
+}
+
