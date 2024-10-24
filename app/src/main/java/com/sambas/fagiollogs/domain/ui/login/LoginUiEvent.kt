@@ -1,6 +1,5 @@
 package com.sambas.fagiollogs.domain.ui.login
 
-import android.content.IntentSender
 import com.sambas.fagiollogs.core.viewmodel.UiEvent
 
 sealed class LoginUiEvent : UiEvent {

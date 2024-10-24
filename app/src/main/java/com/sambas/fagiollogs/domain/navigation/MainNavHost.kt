@@ -1,10 +1,6 @@
 package com.sambas.fagiollogs.domain.navigation
 
 import NavHost
-import android.app.Activity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -13,7 +9,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
-import com.google.android.gms.auth.api.identity.Identity
 import com.sambas.fagiollogs.core.navigation.NavGraphBuilder
 import com.sambas.fagiollogs.core.navigation.composable
 import com.sambas.fagiollogs.core.navigation.navigate

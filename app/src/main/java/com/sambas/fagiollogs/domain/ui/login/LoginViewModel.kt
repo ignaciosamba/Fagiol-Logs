@@ -1,17 +1,12 @@
 package com.sambas.fagiollogs.domain.ui.login
 
 import android.content.Context
-import androidx.credentials.CredentialManager
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.auth.api.identity.SignInCredential
 import com.sambas.fagiollogs.R
 import com.sambas.fagiollogs.core.autentication.AuthManager
 import com.sambas.fagiollogs.core.autentication.AuthState
@@ -22,7 +17,6 @@ import com.sambas.fagiollogs.core.design.loader.ScreenLoadingType
 import com.sambas.fagiollogs.core.design.loader.toLoadingModel
 import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
 import com.sambas.fagiollogs.core.viewmodel.AuthenticationBaseViewModel
-import com.sambas.fagiollogs.core.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -42,9 +36,6 @@ class LoginViewModel @Inject constructor(
     authManager = authManager,
     loadingStateUpdater = { state, loadingType -> state.copy(loadingModel = loadingType.toLoadingModel()) }
 ) {
-
-    private val oneTapClient: SignInClient = Identity.getSignInClient(context)
-    private val credentialManager: CredentialManager = CredentialManager.create(context)
 
     init {
         checkUserLoggedIn()
