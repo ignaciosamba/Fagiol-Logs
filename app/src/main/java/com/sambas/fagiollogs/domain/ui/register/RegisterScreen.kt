@@ -3,7 +3,6 @@ package com.sambas.fagiollogs.domain.ui.register
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,7 +31,6 @@ import com.sambas.fagiollogs.R
 import com.sambas.fagiollogs.core.design.button.DesignButtons
 import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
 import com.sambas.fagiollogs.core.design.text.DesignText
-import com.sambas.fagiollogs.core.design.theme.DesignColors
 import com.sambas.fagiollogs.core.design.theme.DesignTheme
 import com.sambas.fagiollogs.core.design.theme.PreviewTheme
 import com.sambas.fagiollogs.core.design.theme.SpacerXS
@@ -151,7 +149,7 @@ fun RegisterScreen(
                 },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_user),
+                        painter = painterResource(id = R.drawable.ic_email),
                         contentDescription = "Username",
                         tint = DesignTheme.colors.contentPrimary,
                         modifier = Modifier.size(DesignTheme.spacing.space_xs)
