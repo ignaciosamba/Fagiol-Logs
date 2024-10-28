@@ -33,4 +33,16 @@ internal interface MainNavigationGraph : NavigationNodeNew, AnimatedNavigationNo
             val isLoggedIn: Boolean,
         ) : Parcelable
     }
+
+    object RegisterScreenDestination :
+        NavDestination(),
+        MainNavigationGraph {
+        override val transition = VerticalTransition
+    }
+
+    object LandingScreenDestination :
+        NavDestination(),
+        MainNavigationGraph {
+        override val transition = VerticalTransition
+    }
 }

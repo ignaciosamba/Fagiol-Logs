@@ -16,14 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FagiolLogs"
         tools:targetApi="31">
+        <meta-data
+            android:name="google_sign_in_client_id"
+            android:value="your-client-id.apps.googleusercontent.com"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.FagiolLogs">
+            android:theme="@style/Theme.FagiolLogs.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
