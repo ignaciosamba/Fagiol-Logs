@@ -34,7 +34,7 @@ fun LoginScreen(
     loginUiState: LoginUiState,
     onLoginClick: (String, String) -> Unit,
     onLoginGoogleClick: () -> Unit,
-    onForgotPasswordClick: () -> Unit,
+    onForgotPasswordClick: (String) -> Unit,
     onCreateAccountClick: () -> Unit,
     onPasswordChange: (String) -> Unit,
     onEmailChange: (String) -> Unit
@@ -152,7 +152,7 @@ fun LoginScreen(
                         end = DesignTheme.spacing.space_mini
                     )
                     .clickable {
-                        onForgotPasswordClick()
+                        onForgotPasswordClick(loginUiState.email)
                     },
                 textAlign = TextAlign.End,
                 text = stringResource(R.string.forgot_password_text),

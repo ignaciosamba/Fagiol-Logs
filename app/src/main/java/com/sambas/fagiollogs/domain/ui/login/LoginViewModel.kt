@@ -16,6 +16,7 @@ import com.sambas.fagiollogs.core.design.error.SnackbarGenericErrorBuilder
 import com.sambas.fagiollogs.core.design.loader.ScreenLoadingType
 import com.sambas.fagiollogs.core.design.loader.toLoadingModel
 import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
+import com.sambas.fagiollogs.core.design.snackbar.SnackBarGeneric
 import com.sambas.fagiollogs.core.viewmodel.AuthenticationBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -94,6 +95,25 @@ class LoginViewModel @Inject constructor(
         )
     }
 
+    fun onPasswordResetRequested(email: String) {
+        launchAuthenticationNetworkCall(
+            action = {
+                if (email.isEmpty()) {
+                    onNewError(SnackbarError.Builder(R.string.email_not_valid_error))
+                } else {
+                    auth.useAppLanguage()
+                    auth.sendPasswordResetEmail(email)
+                }
+            },
+            onSuccess = {
+                onNewMessage(SnackBarGeneric.Builder(R.string.reset_password_email_sent))
+            },
+            onError = {
+                onNewError(SnackbarGenericErrorBuilder)
+            }
+        )
+    }
+
 
     fun onPasswordChanged(password: String) {
         setState {
@@ -144,5 +164,18 @@ class LoginViewModel @Inject constructor(
             }
         } as ErrorBase
         setState { it.copy(error = newError) }
+    }
+
+    /**
+     * Method to set in the [LoginScreen] a new Error to be shown by the [BaseScaffold]
+     *
+     */
+    private fun onNewMessage(message: SnackBarGeneric.Builder) {
+        val newMessage = message.build {
+            setState { state ->
+                state.copy(message = state.message.takeIf { it != this })
+            }
+        }
+        setState { it.copy(message = newMessage) }
     }
 }

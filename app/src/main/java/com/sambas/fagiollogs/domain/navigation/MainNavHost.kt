@@ -190,7 +190,7 @@ private fun NavGraphBuilder.loginScreen(
                 viewModel.loginUser(userName, password)
             },
             onLoginGoogleClick = viewModel::initiateGoogleSignIn,
-            onForgotPasswordClick = {},
+            onForgotPasswordClick = viewModel::onPasswordResetRequested,
             onCreateAccountClick = {
                 navController.navigate(
                     from = destination,
