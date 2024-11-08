@@ -10,9 +10,9 @@ import com.sambas.fagiollogs.core.design.text.DesignText
 import com.sambas.fagiollogs.core.design.theme.DesignTheme
 
 @Composable
-fun LandingScreen(){
+fun LandingScreen(text: String = "LANDING"){
     Box(modifier = Modifier.fillMaxSize().background(DesignTheme.colors.backgroundPrimary),
         contentAlignment = Alignment.Center) {
-        DesignText.body.Medium("LANDING")
+        DesignText.body.Medium(text)
     }
 }

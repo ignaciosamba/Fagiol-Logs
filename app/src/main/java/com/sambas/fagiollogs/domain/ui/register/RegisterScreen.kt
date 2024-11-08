@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -33,6 +36,7 @@ import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
 import com.sambas.fagiollogs.core.design.text.DesignText
 import com.sambas.fagiollogs.core.design.theme.DesignTheme
 import com.sambas.fagiollogs.core.design.theme.PreviewTheme
+import com.sambas.fagiollogs.core.design.theme.SpacerMini
 import com.sambas.fagiollogs.core.design.theme.SpacerXS
 
 @Composable
@@ -53,7 +57,7 @@ fun RegisterScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     BaseScaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().navigationBarsPadding(),
         uiState = registerUiState,
         bottomBar = {
             DesignButtons.primary.Medium(
@@ -78,9 +82,13 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    horizontal = DesignTheme.spacing.space_xs,
-                    vertical = DesignTheme.spacing.space_m
-                ),
+                    start = DesignTheme.spacing.space_xs,
+                    end = DesignTheme.spacing.space_xs,
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+
+                )
+                .verticalScroll(state = rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DesignText.titles.Medium(
@@ -98,12 +106,14 @@ fun RegisterScreen(
                 color = DesignTheme.colors.contentPrimary,
                 modifier = Modifier
                     .padding(
-                        top = DesignTheme.spacing.space_l,
+                        top = DesignTheme.spacing.space_m,
                         bottom = DesignTheme.spacing.space_s
                     )
             )
 
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 value = registerUiState.userName,
                 onValueChange = {
                     onUserNameChange(it)
@@ -122,9 +132,6 @@ fun RegisterScreen(
                         modifier = Modifier.size(DesignTheme.spacing.space_xs)
                     )
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = DesignTheme.spacing.space_xs),
                 shape = RoundedCornerShape(16.dp),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = DesignTheme.colors.backgroundPrimary,
@@ -133,10 +140,23 @@ fun RegisterScreen(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
+                supportingText = {
+                    if (registerUiState.errorUserName) {
+                        Row {
+                            DesignText.body.Small(
+                                stringResource(R.string.email_not_valid_user_name),
+                                Modifier.clearAndSetSemantics {}
+                            )
+                        }
+                    }
+                },
+                isError = registerUiState.errorUserName,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
 
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 value = registerUiState.email,
                 onValueChange = {
                     onEmailChange(it)
@@ -155,9 +175,6 @@ fun RegisterScreen(
                         modifier = Modifier.size(DesignTheme.spacing.space_xs)
                     )
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = DesignTheme.spacing.space_xs),
                 shape = RoundedCornerShape(16.dp),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = DesignTheme.colors.backgroundPrimary,
@@ -181,6 +198,8 @@ fun RegisterScreen(
             )
 
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 value = registerUiState.password,
                 onValueChange = {
                     onPasswordChange(it)
@@ -218,9 +237,6 @@ fun RegisterScreen(
                     )
                 },
                 visualTransformation = if (!registerUiState.mustShowPassword) PasswordVisualTransformation() else VisualTransformation.None,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = DesignTheme.spacing.space_xs),
                 shape = RoundedCornerShape(16.dp),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = DesignTheme.colors.backgroundPrimary,
@@ -244,6 +260,8 @@ fun RegisterScreen(
             )
 
             TextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 value = registerUiState.secondPassword,
                 onValueChange = {
                     onPasswordRepeatedChange(it)
@@ -281,9 +299,6 @@ fun RegisterScreen(
                     )
                 },
                 visualTransformation = if (!registerUiState.mustShowRepeatedPassword) PasswordVisualTransformation() else VisualTransformation.None,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = DesignTheme.spacing.space_xxs),
                 shape = RoundedCornerShape(16.dp),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = DesignTheme.colors.backgroundPrimary,
@@ -312,8 +327,8 @@ fun RegisterScreen(
 
                 ),
             )
-            SpacerXS()
-            DesignText.body.Medium(
+            SpacerMini()
+            DesignText.body.Small(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.disclaimer_password),
                 color = DesignTheme.colors.contentQuaternary,

@@ -34,14 +34,21 @@ class RegisterViewModel @Inject constructor(
     fun registerUser(name: String, email: String, password: String) {
         launchAuthenticationNetworkCall(
             action = {
-                // Register the user and password.
-                val result = auth.createUserWithEmailAndPassword(email, password).await()
-                // Update the user's profile with the provided name.
-                val profileUpdate = UserProfileChangeRequest.Builder()
-                    .setDisplayName(name)
-                    .build()
-                result.user?.updateProfile(profileUpdate)?.await()
-                result
+                if(name.isNotBlank()) {
+                    // Register the user and password.
+                    val result = auth.createUserWithEmailAndPassword(email, password).await()
+                    // Update the user's profile with the provided name.
+                    val profileUpdate = UserProfileChangeRequest.Builder()
+                        .setDisplayName(name)
+                        .build()
+                    result.user?.updateProfile(profileUpdate)?.await()
+                    result
+                } else {
+                    setState {
+                        it.copy(errorUserName = true)
+                    }
+                    throw IllegalArgumentException("Name cannot be empty")
+                }
             },
             onSuccess = {
                 setState { state ->
