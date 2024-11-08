@@ -1,10 +1,11 @@
 package com.sambas.fagiollogs.core.design.navigationbar
 
-import android.util.Log
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -66,7 +67,7 @@ internal fun BottomNavigationBar(
     }
 
     NavigationBar(
-        modifier = modifier,
+        modifier = modifier.height(60.dp),
         containerColor = DesignTheme.colors.backgroundActionPrimary,
         tonalElevation = DesignTheme.assetDimen.dimen_mini
     ) {

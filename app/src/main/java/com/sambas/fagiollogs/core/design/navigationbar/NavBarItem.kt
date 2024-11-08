@@ -26,7 +26,7 @@ internal fun NavBarItem(
     Column(
         modifier = modifier
             .clickable(onClick = onClick)
-            .padding(DesignTheme.assetDimen.dimen_xs),
+            .padding(DesignTheme.assetDimen.dimen_mini),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(

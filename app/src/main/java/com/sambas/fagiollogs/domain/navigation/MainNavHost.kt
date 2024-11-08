@@ -1,13 +1,13 @@
 package com.sambas.fagiollogs.domain.navigation
 
 import NavHost
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
-import com.google.firebase.firestore.persistentCacheSettings
 import com.sambas.fagiollogs.core.design.navigationbar.BottomBarDestination
 import com.sambas.fagiollogs.core.design.navigationbar.BottomNavigationBar
 import com.sambas.fagiollogs.core.navigation.NavGraphBuilder
@@ -26,7 +26,9 @@ internal fun MainNavHost(
     rootNavController: NavController
 ) {
     val navController = rememberNavControllerWithLogger()
+
     Scaffold(
+        modifier = Modifier.fillMaxSize().navigationBarsPadding(),
         bottomBar = {
             BottomNavigationBar(
                 navController = navController,
@@ -76,7 +78,7 @@ internal fun MainNavHost(
         NavHost(
             navController = navController,
             graph = MainNavigationGraph,
-            modifier = modifier.padding(paddingValues)
+            modifier = modifier.fillMaxSize()
         ) {
             navigation(graph = MainNavigationGraph) {
                 for (destination in MainNavigationGraph.destinations) {
