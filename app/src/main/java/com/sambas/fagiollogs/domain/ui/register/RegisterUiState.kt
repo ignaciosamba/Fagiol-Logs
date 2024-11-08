@@ -13,6 +13,7 @@ data class RegisterUiState (
     val userName: String = "",
     val mustShowPassword: Boolean = false,
     val mustShowRepeatedPassword: Boolean = false,
+    val errorUserName: Boolean = false,
     val errorEmail: Boolean = false,
     val errorPassword: String? = null,
     val errorRepeatedPassword: Boolean = false,

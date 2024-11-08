@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 data class DesignAssetDimen(
+    val dimen_mini: Dp,
     val dimen_xxs: Dp,
     val dimen_xs: Dp,
     val dimen_s: Dp,
@@ -18,6 +19,7 @@ data class DesignAssetDimen(
 )
 
 val bigScreenAssetDimen = DesignAssetDimen(
+    dimen_mini = 8.dp,
     dimen_xxs = 12.dp,
     dimen_xs = 16.dp,
     dimen_s = 20.dp,
@@ -30,6 +32,7 @@ val bigScreenAssetDimen = DesignAssetDimen(
 )
 
 val smallScreenAssetDimen = DesignAssetDimen(
+    dimen_mini = 8.dp,
     dimen_xxs = 12.dp,
     dimen_xs = 16.dp,
     dimen_s = 20.dp,

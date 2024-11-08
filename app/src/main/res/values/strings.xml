@@ -21,6 +21,7 @@
 
     <!-- Register -->
     <string name="not_matching_password_error">The passwords do not match</string>
+    <string name="email_not_valid_user_name">The email is not valid</string>
     <string name="email_not_valid_error">The email is not valid</string>
     <string name="password_not_valid_error">The password is not compliant</string>
     <string name="disclaimer_password">Your password must include at least:\n• 8 characters\n• One lowercase letter\n• One uppercase letter\n• One number\n• One special character</string>

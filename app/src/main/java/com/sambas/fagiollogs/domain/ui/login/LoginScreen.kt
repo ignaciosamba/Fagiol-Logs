@@ -2,8 +2,12 @@ package com.sambas.fagiollogs.domain.ui.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -50,22 +54,13 @@ fun LoginScreen(
                 .padding(
                     horizontal = DesignTheme.spacing.space_xs,
                     vertical = DesignTheme.spacing.space_m
-                ),
+                )
+                .verticalScroll(state = rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            DesignText.titles.Medium(
-                text = "FAGIOL'S LOG",
-                color = DesignTheme.colors.contentPrimary,
-                modifier = Modifier
-                    .padding(
-                        top = DesignTheme.spacing.space_l,
-                        bottom = DesignTheme.spacing.space_xs
-                    )
-            )
-
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription ="Login Illustration",
+                contentDescription = "Login Illustration",
                 modifier = Modifier
                     .size(180.dp)
                     .padding(DesignTheme.spacing.space_xs),
@@ -185,8 +180,10 @@ fun LoginScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .padding(bottom = DesignTheme.spacing.space_m),
+                    .padding(
+                        top = DesignTheme.spacing.space_m,
+                        bottom = DesignTheme.spacing.space_m
+                    ),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = CenterVertically
             ) {

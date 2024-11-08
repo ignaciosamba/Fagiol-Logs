@@ -1,14 +1,15 @@
 package com.sambas.fagiollogs.domain.navigation
 
 import NavHost
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
+import com.google.firebase.firestore.persistentCacheSettings
+import com.sambas.fagiollogs.core.design.navigationbar.BottomBarDestination
+import com.sambas.fagiollogs.core.design.navigationbar.BottomNavigationBar
 import com.sambas.fagiollogs.core.navigation.NavGraphBuilder
 import com.sambas.fagiollogs.core.navigation.composable
 import com.sambas.fagiollogs.core.navigation.navigate
@@ -16,217 +17,99 @@ import com.sambas.fagiollogs.core.navigation.navigation
 import com.sambas.fagiollogs.core.navigation.popUpTo
 import com.sambas.fagiollogs.core.navigation.rememberNavControllerWithLogger
 import com.sambas.fagiollogs.domain.ui.landing.LandingScreen
-import com.sambas.fagiollogs.domain.ui.login.LoginScreen
-import com.sambas.fagiollogs.domain.ui.login.LoginUiEvent
-import com.sambas.fagiollogs.domain.ui.login.LoginViewModel
-import com.sambas.fagiollogs.domain.ui.register.RegisterScreen
-import com.sambas.fagiollogs.domain.ui.register.RegisterViewModel
-import com.sambas.fagiollogs.domain.ui.splash.SplashScreen
 
 @Composable
 internal fun MainNavHost(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
     onClose: () -> Unit,
+    rootNavController: NavController
 ) {
     val navController = rememberNavControllerWithLogger()
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                onClickTab = { route, originDestination ->
+                    when (route) {
+                        BottomBarDestination.HOME -> {
+                            navController.navigate(
+                                from = originDestination,
+                                navigationUri = MainNavigationGraph.LandingScreenDestination.navigationUri(),
+                                navOptions = navOptions {
+                                    popUpTo(originDestination) {
+                                        inclusive = true
+                                    }
+                                }
+                            )
+                        }
 
-    NavHost(
-        navController = navController,
-        graph = MainNavigationGraph,
-        modifier = modifier,
-    ) {
-        navigation(graph = MainNavigationGraph) {
-            for (destination in MainNavigationGraph.destinations) {
-                when (destination) {
-                    is MainNavigationGraph.SplashScreenDestination -> {
-                        splashScreen(
-                            destination = destination,
-                            navController = navController,
-                            closeCallback = onClose
-                        )
+                        BottomBarDestination.STATS -> {
+                            navController.navigate(
+                                from = originDestination,
+                                navigationUri = MainNavigationGraph.StatsScreenDestination.navigationUri(),
+                                navOptions = navOptions {
+                                    popUpTo(originDestination) {
+                                        inclusive = true
+                                    }
+                                }
+                            )
+                        }
+
+                        BottomBarDestination.SETTINGS -> {
+                            navController.navigate(
+                                from = originDestination,
+                                navigationUri = MainNavigationGraph.SettingsScreenDestination.navigationUri(),
+                                navOptions = navOptions {
+                                    popUpTo(originDestination) {
+                                        inclusive = true
+                                    }
+                                }
+                            )
+                        }
                     }
 
-                    is MainNavigationGraph.LogInScreenDestination -> {
-                        loginScreen(
-                            destination = destination,
-                            navController = navController,
-                            closeCallback = onClose
-                        )
-                    }
-
-                    is MainNavigationGraph.RegisterScreenDestination -> {
-                        registerScreen(
-                            destination = destination,
-                            navController = navController,
-                            onBackPressed = onBackPressed
-                        )
-                    }
-
-                    is MainNavigationGraph.LandingScreenDestination -> {
-                        landingScreen(
-                            destination = destination,
-                            navController = navController,
-                            onBackPressed = onClose
-                        )
-                    }
                 }
-            }
-
+            )
         }
-    }
-}
+    ) { paddingValues ->
+        NavHost(
+            navController = navController,
+            graph = MainNavigationGraph,
+            modifier = modifier.padding(paddingValues)
+        ) {
+            navigation(graph = MainNavigationGraph) {
+                for (destination in MainNavigationGraph.destinations) {
+                    when (destination) {
+                        is MainNavigationGraph.LandingScreenDestination -> {
+                            landingScreen(
+                                destination = destination,
+                                navController = navController,
+                                onBackPressed = onBackPressed
+                            )
+                        }
 
-private fun NavGraphBuilder.splashScreen(
-    destination: MainNavigationGraph.SplashScreenDestination,
-    navController: NavController,
-    closeCallback: () -> Unit,
-) {
-    composable(destination) { navBackStackEntry ->
+                        is MainNavigationGraph.StatsScreenDestination -> {
+                            statsScreen(
+                                destination = destination,
+                                navController = navController,
+                                onBackPressed = onBackPressed
+                            )
+                        }
 
-        val viewModel = hiltViewModel<LoginViewModel>()
-        val state = viewModel.state.collectAsStateWithLifecycle()
-        LaunchedEffect(viewModel) {
-            viewModel.events.collect { event ->
-                when (event) {
-                    is LoginUiEvent.UserAlreadyLoggedIn -> {
-                        navController.navigate(
-                            from = destination,
-                            navigationUri = MainNavigationGraph
-                                .LandingScreenDestination.navigationUri(),
-                            navOptions = navOptions {
-                                popUpTo(MainNavigationGraph.SplashScreenDestination) {
-                                    inclusive = true
-                                }
-                            }
-                        )
-                    }
-
-                    is LoginUiEvent.LoginError -> { /*nothing to do here*/
-                    }
-
-                    LoginUiEvent.LoginSuccess -> {
-                        navController.navigate(
-                            from = destination,
-                            navigationUri = MainNavigationGraph
-                                .LandingScreenDestination.navigationUri(),
-                            navOptions = navOptions {
-                                popUpTo(MainNavigationGraph.SplashScreenDestination) {
-                                    inclusive = true
-                                }
-                            }
-                        )
-                    }
-
-                    LoginUiEvent.UserNotLoggedIn -> {
-                        val loginArgs = MainNavigationGraph.LogInScreenDestination.Args(
-                            isLoggedIn = false
-                        )
-                        navController.navigate(
-                            from = destination,
-                            navigationUriWithArgs = MainNavigationGraph
-                                .LogInScreenDestination.navigationUri(loginArgs),
-                        )
+                        is MainNavigationGraph.SettingsScreenDestination -> {
+                            settingsScreen(
+                                destination = destination,
+                                navController = navController,
+                                onBackPressed = onBackPressed
+                            )
+                        }
                     }
                 }
             }
         }
-        SplashScreen(loginUiState = state.value)
-
     }
-}
 
-private fun NavGraphBuilder.loginScreen(
-    destination: MainNavigationGraph.LogInScreenDestination,
-    navController: NavController,
-    closeCallback: () -> Unit,
-) {
-    composable(destination) { navBackStackEntry ->
-        val context = LocalContext.current
-        val viewModel = hiltViewModel<LoginViewModel>()
-        val state = viewModel.state.collectAsStateWithLifecycle()
-
-        LaunchedEffect(viewModel) {
-            viewModel.events.collect { event ->
-                when (event) {
-                    is LoginUiEvent.UserAlreadyLoggedIn -> {
-                        navController.navigate(
-                            from = destination,
-                            navigationUri = MainNavigationGraph
-                                .LandingScreenDestination.navigationUri(),
-                            navOptions = navOptions {
-                                popUpTo(MainNavigationGraph.LogInScreenDestination) {
-                                    inclusive = true
-                                }
-                            }
-                        )
-                    }
-
-                    is LoginUiEvent.LoginError -> { /*nothing to do here*/
-                    }
-
-                    LoginUiEvent.LoginSuccess -> {
-                        navController.navigate(
-                            from = destination,
-                            navigationUri = MainNavigationGraph
-                                .LandingScreenDestination.navigationUri(),
-                            navOptions = navOptions {
-                                popUpTo(MainNavigationGraph.LogInScreenDestination) {
-                                    inclusive = true
-                                }
-                            }
-                        )
-                    }
-
-                    LoginUiEvent.UserNotLoggedIn -> { /*nothing to do here*/
-                    }
-                }
-            }
-        }
-
-        LoginScreen(
-            loginUiState = state.value,
-            onLoginClick = { userName, password ->
-                viewModel.loginUser(userName, password)
-            },
-            onLoginGoogleClick = viewModel::initiateGoogleSignIn,
-            onForgotPasswordClick = viewModel::onPasswordResetRequested,
-            onCreateAccountClick = {
-                navController.navigate(
-                    from = destination,
-                    navigationUri = MainNavigationGraph
-                        .RegisterScreenDestination.navigationUri(),
-                )
-            },
-            onPasswordChange = viewModel::onPasswordChanged,
-            onEmailChange = viewModel::onEmailChanged
-        )
-    }
-}
-
-private fun NavGraphBuilder.registerScreen(
-    destination: MainNavigationGraph.RegisterScreenDestination,
-    navController: NavController,
-    onBackPressed: () -> Unit
-) {
-    composable(destination) { navBackStackEntry ->
-        val viewModel = hiltViewModel<RegisterViewModel>()
-        val state = viewModel.state.collectAsStateWithLifecycle()
-
-        RegisterScreen(
-            modifier = Modifier,
-            registerUiState = state.value,
-            onUserNameChange = viewModel::onNameChanged,
-            onEmailChange = viewModel::onEmailChanged,
-            onPasswordChange = viewModel::onPasswordChanged,
-            onPasswordRepeatedChange = viewModel::onPasswordRepeatedChange,
-            onRegisterClick = viewModel::registerUser,
-            onShowPasswordText = viewModel::onShowPasswordText,
-            onShowRepeatedPasswordText = viewModel::onShowRepeatedPasswordText,
-            onValidateRepeatedPassword = viewModel::onValidateRepeatedPassword,
-            onBackPressed = onBackPressed
-        )
-    }
 }
 
 private fun NavGraphBuilder.landingScreen(
@@ -236,5 +119,27 @@ private fun NavGraphBuilder.landingScreen(
 ) {
     composable(destination) {
         LandingScreen()
+    }
+}
+
+private fun NavGraphBuilder.statsScreen(
+    destination: MainNavigationGraph.StatsScreenDestination,
+    navController: NavController,
+    onBackPressed: () -> Unit
+) {
+    composable(destination) {
+        // Will be StatsScreen()
+        LandingScreen(text = "STATS")
+    }
+}
+
+private fun NavGraphBuilder.settingsScreen(
+    destination: MainNavigationGraph.SettingsScreenDestination,
+    navController: NavController,
+    onBackPressed: () -> Unit
+) {
+    composable(destination) {
+        // Will be StatsScreen()
+        LandingScreen(text = "SETTINGS")
     }
 }
