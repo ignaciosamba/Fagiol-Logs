@@ -34,17 +34,17 @@ internal fun NavBarItem(
             contentDescription = label,
             modifier = Modifier.size(DesignTheme.assetDimen.dimen_xs),
             tint = if (selected) {
-                DesignTheme.colors.backgroundPrimary
+                DesignTheme.colors.backgroundActionPrimary
             } else {
-                DesignTheme.colors.backgroundDisabled
+                DesignTheme.colors.backgroundActionSecondary
             }
         )
         DesignText.body.Small(
             text = label,
             color = if (selected) {
-                DesignTheme.colors.backgroundPrimary
+                DesignTheme.colors.backgroundActionPrimary
             } else {
-                DesignTheme.colors.backgroundDisabled
+                DesignTheme.colors.backgroundActionSecondary
             }
         )
     }
@@ -57,7 +57,7 @@ private fun NavBarItemPreview() {
         NavBarItem(
             icon = R.drawable.ic_calendar_minus,
             label = "Home",
-            selected = true,
+            selected = false,
             onClick = {}
         )
     }
