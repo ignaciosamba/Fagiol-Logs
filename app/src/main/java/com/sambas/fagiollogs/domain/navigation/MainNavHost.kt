@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import com.sambas.fagiollogs.core.design.navigationbar.BottomBarDestination
@@ -17,6 +18,7 @@ import com.sambas.fagiollogs.core.navigation.navigation
 import com.sambas.fagiollogs.core.navigation.popUpTo
 import com.sambas.fagiollogs.core.navigation.rememberNavControllerWithLogger
 import com.sambas.fagiollogs.domain.ui.landing.LandingScreen
+import com.sambas.fagiollogs.domain.ui.landing.LandingViewModel
 
 @Composable
 internal fun MainNavHost(
@@ -120,6 +122,7 @@ private fun NavGraphBuilder.landingScreen(
     onBackPressed: () -> Unit
 ) {
     composable(destination) {
+        val viewModel: LandingViewModel = hiltViewModel()
         LandingScreen()
     }
 }
