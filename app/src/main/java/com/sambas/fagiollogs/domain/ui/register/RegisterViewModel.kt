@@ -1,27 +1,31 @@
 package com.sambas.fagiollogs.domain.ui.register
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.sambas.fagiollogs.R
 import com.sambas.fagiollogs.core.autentication.AuthManager
 import com.sambas.fagiollogs.core.design.error.ErrorBase
 import com.sambas.fagiollogs.core.design.error.SnackbarError
 import com.sambas.fagiollogs.core.design.loader.toLoadingModel
 import com.sambas.fagiollogs.core.viewmodel.AuthenticationBaseViewModel
-import com.sambas.fagiollogs.core.viewmodel.BaseViewModel
 import com.sambas.fagiollogs.domain.exception.PasswordNotMatchingException
 import com.sambas.fagiollogs.domain.utils.extractPasswordRequirementsFromFirebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+
+private const val TAG = "RegisterViewModel"
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val auth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
     savedStateHandle: SavedStateHandle,
     authManager: AuthManager
 ) : AuthenticationBaseViewModel<RegisterUiState, RegisterUiEvent>(
@@ -30,6 +34,8 @@ class RegisterViewModel @Inject constructor(
     authManager = authManager,
     loadingStateUpdater = { state, loadingType -> state.copy(loadingModel = loadingType.toLoadingModel()) }
 ) {
+
+
 
     fun registerUser(name: String, email: String, password: String) {
         launchAuthenticationNetworkCall(
@@ -61,25 +67,31 @@ class RegisterViewModel @Inject constructor(
                 emitEvent(RegisterUiEvent.RegistrationSuccess)
             },
             onError = {
-                if (it is PasswordNotMatchingException) {
-                    onNewError(SnackbarError.Builder(R.string.not_matching_password_error))
-                } else if (it is FirebaseAuthInvalidCredentialsException) {
-                    setState { state ->
-                        state.copy(
-                            errorEmail = true
-                        )
+                when (it) {
+                    is PasswordNotMatchingException -> {
+                        onNewError(SnackbarError.Builder(R.string.not_matching_password_error))
                     }
-                    onNewError(SnackbarError.Builder(R.string.email_not_valid_error))
-                } else {
-                    val errorMessage = extractPasswordRequirementsFromFirebase(it.localizedMessage)
-                    setState { state ->
-                        state.copy(
-                            errorPassword = errorMessage
-                        )
+
+                    is FirebaseAuthInvalidCredentialsException -> {
+                        setState { state ->
+                            state.copy(
+                                errorEmail = true
+                            )
+                        }
+                        onNewError(SnackbarError.Builder(R.string.email_not_valid_error))
                     }
-                    onNewError(errorMessage?.let { message ->
-                        SnackbarError.Builder(message)
-                    } ?: SnackbarError.Builder(R.string.generic_error_text_fullscreen))
+
+                    else -> {
+                        val errorMessage = extractPasswordRequirementsFromFirebase(it.localizedMessage)
+                        setState { state ->
+                            state.copy(
+                                errorPassword = errorMessage
+                            )
+                        }
+                        onNewError(errorMessage?.let { message ->
+                            SnackbarError.Builder(message)
+                        } ?: SnackbarError.Builder(R.string.generic_error_text_fullscreen))
+                    }
                 }
             }
         )
@@ -141,6 +153,23 @@ class RegisterViewModel @Inject constructor(
                 it.copy(errorRepeatedPassword = false)
             }
         }
+    }
+
+    fun saveNewUserToFirestore() {
+        val userId = authManager.getCurrentUser()?.uid.orEmpty()
+        Log.d("SAMBA1", "userId: $userId")
+        val data = hashMapOf(
+            "userId" to userId,
+            "name" to authManager.getCurrentUser()?.displayName.orEmpty(),
+            "email" to authManager.getCurrentUser()?.email.orEmpty(),
+            "timestamp" to FieldValue.serverTimestamp()
+        )
+
+        firestore.collection("users")
+            .document(userId)
+            .set(data, SetOptions.merge())
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.d(TAG, "Error writing document", e) }
     }
 
     /**

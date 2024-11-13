@@ -8,13 +8,11 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AuthManager @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val auth: FirebaseAuth
 ) : DefaultLifecycleObserver {
 
@@ -84,6 +82,8 @@ class AuthManager @Inject constructor(
         authStateListener?.let { auth.removeAuthStateListener(it) }
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
     }
+
+    fun getCurrentUser() = auth.currentUser
 }
 
 sealed class AuthState {

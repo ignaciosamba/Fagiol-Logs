@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FieldValue
 import com.sambas.fagiollogs.R
 import com.sambas.fagiollogs.core.autentication.AuthManager
 import com.sambas.fagiollogs.core.autentication.AuthState
@@ -18,8 +19,12 @@ import com.sambas.fagiollogs.core.design.loader.toLoadingModel
 import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
 import com.sambas.fagiollogs.core.design.snackbar.SnackBarGeneric
 import com.sambas.fagiollogs.core.viewmodel.AuthenticationBaseViewModel
+import com.sambas.fagiollogs.di.ApplicationScope
+import com.sambas.fagiollogs.domain.utils.firestore.FirestoreUtils
+import com.sambas.fagiollogs.domain.utils.firestore.USER_DB_BASE_PATH
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -27,10 +32,12 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
+    @ApplicationScope private val applicationScope: CoroutineScope,
     private val auth: FirebaseAuth,
     authManager: AuthManager,
     private val googleSignInHelper: GoogleSignInHelper,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val firestoreUtils: FirestoreUtils,
 ) : AuthenticationBaseViewModel<LoginUiState, LoginUiEvent>(
     savedStateHandle = savedStateHandle,
     initialState = LoginUiState(),
@@ -150,6 +157,23 @@ class LoginViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun saveUserToFirestore() {
+        applicationScope.launch {
+            val userId = authManager.getCurrentUser()?.uid.orEmpty()
+            val data = hashMapOf(
+                "userId" to userId,
+                "name" to authManager.getCurrentUser()?.displayName.orEmpty(),
+                "email" to authManager.getCurrentUser()?.email.orEmpty(),
+                "timestamp" to FieldValue.serverTimestamp()
+            )
+
+            firestoreUtils.addDocumentToCollection(
+                collectionPath = "$USER_DB_BASE_PATH$userId",
+                data = data
+            )
         }
     }
 

@@ -25,7 +25,7 @@ mockito-kotlin = "5.4.0"
 kotlinx-coroutines = "1.7.1"
 kotlin-test = "2.0.0"
 androidx-arch-core = "2.2.0"
-firebase = "33.3.0"
+firebase = "33.5.1"
 javapoet = "1.13.0"
 firebaseAuthKtx = "23.0.0"
 google-auth-services = "21.2.0"
@@ -71,6 +71,7 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 androidx-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidx-arch-core" }
 firebase-boom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javapoet" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-auth-services" }
