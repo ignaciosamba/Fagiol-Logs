@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import com.sambas.fagiollogs.core.design.navigationbar.BottomBarDestination
@@ -17,6 +19,10 @@ import com.sambas.fagiollogs.core.navigation.navigation
 import com.sambas.fagiollogs.core.navigation.popUpTo
 import com.sambas.fagiollogs.core.navigation.rememberNavControllerWithLogger
 import com.sambas.fagiollogs.domain.ui.landing.LandingScreen
+import com.sambas.fagiollogs.domain.ui.settings.SettingScreen
+import com.sambas.fagiollogs.domain.ui.settings.SettingViewModel
+import com.sambas.fagiollogs.domain.ui.settings.SettingsUiEvent
+import com.sambas.fagiollogs.domain.ui.settings.SettingsUiState
 
 @Composable
 internal fun MainNavHost(
@@ -87,6 +93,7 @@ internal fun MainNavHost(
                             landingScreen(
                                 destination = destination,
                                 navController = navController,
+                                rootNavController = rootNavController,
                                 onBackPressed = onBackPressed
                             )
                         }
@@ -95,6 +102,7 @@ internal fun MainNavHost(
                             statsScreen(
                                 destination = destination,
                                 navController = navController,
+                                rootNavController = rootNavController,
                                 onBackPressed = onBackPressed
                             )
                         }
@@ -103,6 +111,7 @@ internal fun MainNavHost(
                             settingsScreen(
                                 destination = destination,
                                 navController = navController,
+                                rootNavController = rootNavController,
                                 onBackPressed = onBackPressed
                             )
                         }
@@ -117,6 +126,7 @@ internal fun MainNavHost(
 private fun NavGraphBuilder.landingScreen(
     destination: MainNavigationGraph.LandingScreenDestination,
     navController: NavController,
+    rootNavController: NavController,
     onBackPressed: () -> Unit
 ) {
     composable(destination) {
@@ -127,6 +137,7 @@ private fun NavGraphBuilder.landingScreen(
 private fun NavGraphBuilder.statsScreen(
     destination: MainNavigationGraph.StatsScreenDestination,
     navController: NavController,
+    rootNavController: NavController,
     onBackPressed: () -> Unit
 ) {
     composable(destination) {
@@ -138,10 +149,34 @@ private fun NavGraphBuilder.statsScreen(
 private fun NavGraphBuilder.settingsScreen(
     destination: MainNavigationGraph.SettingsScreenDestination,
     navController: NavController,
+    rootNavController: NavController,
     onBackPressed: () -> Unit
 ) {
     composable(destination) {
         // Will be StatsScreen()
-        LandingScreen(text = "SETTINGS")
+        val viewModel: SettingViewModel = hiltViewModel()
+        LaunchedEffect(viewModel) {
+            viewModel.events.collect { event ->
+                when (event) {
+                    SettingsUiEvent.LogoutSuccess -> {
+                        rootNavController.navigate(
+                            from = RootNavigationGraph.MainGraphDestination,
+                            navigationUri = RootNavigationGraph.AccessGraphDestination.navigationUri(),
+                            navOptions = navOptions {
+                                popUpTo(RootNavigationGraph.MainGraphDestination) {
+                                    inclusive = true
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
+        SettingScreen(
+            settingsUiState = SettingsUiState(),
+            onLogoutClick = viewModel::logOut,
+            onBackPressed = onBackPressed,
+            onOptionClick = {}
+        )
     }
 }

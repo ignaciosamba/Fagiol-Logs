@@ -15,7 +15,6 @@ import com.sambas.fagiollogs.core.navigation.navigate
 import com.sambas.fagiollogs.core.navigation.navigation
 import com.sambas.fagiollogs.core.navigation.popUpTo
 import com.sambas.fagiollogs.core.navigation.rememberNavControllerWithLogger
-import com.sambas.fagiollogs.domain.ui.landing.LandingScreen
 import com.sambas.fagiollogs.domain.ui.login.LoginScreen
 import com.sambas.fagiollogs.domain.ui.login.LoginUiEvent
 import com.sambas.fagiollogs.domain.ui.login.LoginViewModel
@@ -121,6 +120,11 @@ private fun NavGraphBuilder.splashScreen(
                             from = destination,
                             navigationUriWithArgs = AccessNavigationGraph
                                 .LogInScreenDestination.navigationUri(loginArgs),
+                            navOptions = navOptions {
+                                popUpTo(destination) {
+                                    inclusive = true
+                                }
+                            }
                         )
                     }
                 }

@@ -26,7 +26,11 @@
     <string name="password_not_valid_error">The password is not compliant</string>
     <string name="disclaimer_password">Your password must include at least:\n• 8 characters\n• One lowercase letter\n• One uppercase letter\n• One number\n• One special character</string>
 
-
-
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="language_option">Language</string>
+    <string name="theme_option">Theme</string>
+    <string name="notification_option">Notification</string>
+    <string name="logout_title">Logout</string>
 
 </resources>
