@@ -17,8 +17,8 @@ This application is built using modern Android development practices and librari
 - **UI**: Jetpack Compose
 - **Architecture**: Model-View-Intent (MVI)
 - **Dependency Injection**: Hilt
-- **Local Database**: Room
-- **Remote Database**: Firebase
+- **Remote Database**: Firebase - Firestore
+- **Authentication**: Firebase Auth.
 - **Concurrency**: Coroutines
 
 

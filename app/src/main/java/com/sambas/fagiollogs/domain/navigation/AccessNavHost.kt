@@ -19,6 +19,7 @@ import com.sambas.fagiollogs.domain.ui.login.LoginScreen
 import com.sambas.fagiollogs.domain.ui.login.LoginUiEvent
 import com.sambas.fagiollogs.domain.ui.login.LoginViewModel
 import com.sambas.fagiollogs.domain.ui.register.RegisterScreen
+import com.sambas.fagiollogs.domain.ui.register.RegisterUiEvent
 import com.sambas.fagiollogs.domain.ui.register.RegisterViewModel
 import com.sambas.fagiollogs.domain.ui.splash.SplashScreen
 
@@ -52,7 +53,7 @@ internal fun AccessNavHost(
                         loginScreen(
                             destination = destination,
                             navController = navController,
-                            rootNavController=  rootNavController,
+                            rootNavController = rootNavController,
                             closeCallback = onClose
                         )
                     }
@@ -61,7 +62,7 @@ internal fun AccessNavHost(
                         registerScreen(
                             destination = destination,
                             navController = navController,
-                            rootNavController =  rootNavController,
+                            rootNavController = rootNavController,
                             onBackPressed = onBackPressed
                         )
                     }
@@ -101,6 +102,8 @@ private fun NavGraphBuilder.splashScreen(
                     }
 
                     LoginUiEvent.LoginSuccess -> {
+                        // First save the user data in firestore
+                        viewModel.saveUserToFirestore()
                         rootNavController.navigate(
                             from = RootNavigationGraph.AccessGraphDestination,
                             navigationUri = RootNavigationGraph.MainGraphDestination.navigationUri(),
@@ -165,6 +168,8 @@ private fun NavGraphBuilder.loginScreen(
                     }
 
                     LoginUiEvent.LoginSuccess -> {
+                        // First save the user data in firestore
+                        viewModel.saveUserToFirestore()
                         rootNavController.navigate(
                             from = RootNavigationGraph.AccessGraphDestination,
                             navigationUri = RootNavigationGraph.MainGraphDestination.navigationUri(),
@@ -211,6 +216,25 @@ private fun NavGraphBuilder.registerScreen(
     composable(destination) { navBackStackEntry ->
         val viewModel = hiltViewModel<RegisterViewModel>()
         val state = viewModel.state.collectAsStateWithLifecycle()
+
+        LaunchedEffect(viewModel) {
+            viewModel.events.collect { event ->
+                when (event) {
+                    RegisterUiEvent.RegistrationSuccess -> {
+                        viewModel.saveNewUserToFirestore()
+                        rootNavController.navigate(
+                            from = RootNavigationGraph.AccessGraphDestination,
+                            navigationUri = RootNavigationGraph.MainGraphDestination.navigationUri(),
+                            navOptions = navOptions {
+                                popUpTo(RootNavigationGraph.AccessGraphDestination) {
+                                    inclusive = true
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
 
         RegisterScreen(
             modifier = Modifier,

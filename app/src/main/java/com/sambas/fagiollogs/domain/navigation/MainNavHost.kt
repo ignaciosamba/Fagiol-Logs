@@ -23,6 +23,7 @@ import com.sambas.fagiollogs.domain.ui.settings.SettingScreen
 import com.sambas.fagiollogs.domain.ui.settings.SettingViewModel
 import com.sambas.fagiollogs.domain.ui.settings.SettingsUiEvent
 import com.sambas.fagiollogs.domain.ui.settings.SettingsUiState
+import com.sambas.fagiollogs.domain.ui.landing.LandingViewModel
 
 @Composable
 internal fun MainNavHost(
@@ -130,6 +131,7 @@ private fun NavGraphBuilder.landingScreen(
     onBackPressed: () -> Unit
 ) {
     composable(destination) {
+        val viewModel: LandingViewModel = hiltViewModel()
         LandingScreen()
     }
 }
