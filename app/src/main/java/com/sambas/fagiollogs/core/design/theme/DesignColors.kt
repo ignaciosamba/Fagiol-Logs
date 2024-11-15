@@ -111,7 +111,7 @@ fun designColorsDark(
     backgroundActionSecondary = palette.darkTertiary,
     backgroundActionInverseSecondary = palette.actionTertiary,
     backgroundActionInverseSecondaryPressed = palette.actionTertiaryPressed,
-    backgroundDisabled = palette.darkQuaternary,
+    backgroundDisabled = palette.contentDisabled,
     backgroundDisabledInverse = palette.neutralInverseSecondary,
     backgroundInversePrimary = palette.secondary,
     backgroundInverseSecondary = palette.darkSecondary,

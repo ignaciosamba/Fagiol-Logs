@@ -176,6 +176,7 @@ private fun NavGraphBuilder.settingsScreen(
             settingsUiState = SettingsUiState(),
             onLogoutClick = viewModel::logOut,
             onBackPressed = onBackPressed,
+            onToggleClick = { _, _ -> },
             onOptionClick = {}
         )
     }

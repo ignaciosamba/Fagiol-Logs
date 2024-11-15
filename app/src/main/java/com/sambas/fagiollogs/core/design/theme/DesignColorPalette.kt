@@ -10,6 +10,7 @@ data class DesignColorPalette(
     val secondary: Color,
     val action: Color,
     val contentWhite: Color,
+    val contentDisabled: Color,
     val actionSecondary: Color,
     val actionTertiary: Color,
     val accent: Color,
@@ -124,5 +125,6 @@ internal val fagiolsColorPalette by lazy {
         giallo80 = Color(0xFFFEEC78),
         sbarra = Color(0xFF1D9EFB),
         rosa50 = Color(0xFFF431ED),
+        contentDisabled = Color(0xFFBEBEBE)
     )
 }

@@ -31,6 +31,7 @@
     <string name="language_option">Language</string>
     <string name="theme_option">Theme</string>
     <string name="notification_option">Notification</string>
+    <string name="metric_option">Metric System</string>
     <string name="logout_title">Logout</string>
 
 </resources>

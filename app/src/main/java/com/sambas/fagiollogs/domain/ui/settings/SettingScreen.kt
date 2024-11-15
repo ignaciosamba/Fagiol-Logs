@@ -8,19 +8,27 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.sambas.fagiollogs.R
+import com.sambas.fagiollogs.core.design.components.ProfileHeader
+import com.sambas.fagiollogs.core.design.components.row.RowSelector
+import com.sambas.fagiollogs.core.design.components.row.RowToggleSelector
 import com.sambas.fagiollogs.core.design.navigationbar.Toolbar
 import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
 import com.sambas.fagiollogs.core.design.text.DesignText
 import com.sambas.fagiollogs.core.design.theme.DesignTheme
 import com.sambas.fagiollogs.core.design.theme.PreviewTheme
+import com.sambas.fagiollogs.core.design.theme.SpacerXXS
 
 @Composable
 internal fun SettingScreen(
     modifier: Modifier = Modifier,
     settingsUiState: SettingsUiState,
-    onOptionClick: (String) -> Unit,
+    onOptionClick: (SettingsOptions) -> Unit,
+    onToggleClick: (SettingsOptions, Boolean) -> Unit,
     onLogoutClick: () -> Unit,
     onBackPressed: () -> Unit,
 ) {
@@ -37,7 +45,7 @@ internal fun SettingScreen(
                         modifier = Modifier
                             .padding(end = DesignTheme.spacing.space_xs)
                             .clickable { onLogoutClick() },
-                        text = "Logout"
+                        text = stringResource(R.string.logout_title)
                     )
                 }
             )
@@ -53,13 +61,37 @@ internal fun SettingScreen(
                     end = DesignTheme.spacing.space_xs,
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding()
-
                 )
         ) {
-            items(SettingsOptions.entries) { settingItem ->
-                DesignText.body.Medium(
-                    text = stringResource(settingItem.text)
+            item {
+                ProfileHeader(
+                    modifier = Modifier.padding(vertical = DesignTheme.spacing.space_m),
+                    profileImage = R.drawable.ic_mum_profile,
+                    name = "Fagiol's mum",
+                    email = "mum.fagiols@example.com",
+                    buttonText = "Edit profile",
+                    onEditClick = {
+                        // Here we can navigate to the edit profile screen
+                    }
                 )
+            }
+            items(SettingsOptions.entries) { settingItem ->
+                if (settingItem.toggleType) {
+                    RowToggleSelector(
+                        label = stringResource(id = settingItem.text),
+                        leftIcon = ImageVector.vectorResource(settingItem.icon),
+                        isChecked = false,
+                        onClick = { onToggleClick(settingItem, it) }
+                    )
+                } else {
+                    RowSelector(
+                        label = stringResource(id = settingItem.text),
+                        selectedLanguage = "English",
+                        leftIcon = ImageVector.vectorResource(settingItem.icon),
+                        onClick = { onOptionClick(settingItem) }
+                    )
+                }
+                SpacerXXS()
             }
         }
 
@@ -74,6 +106,7 @@ private fun SettingScreenPreview() {
             settingsUiState = SettingsUiState(),
             onOptionClick = {},
             onLogoutClick = {},
+            onToggleClick = { _, _ -> },
             onBackPressed = {}
         )
     }

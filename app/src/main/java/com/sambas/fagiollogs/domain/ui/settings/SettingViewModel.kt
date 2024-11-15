@@ -14,10 +14,15 @@ internal class SettingViewModel @Inject constructor(
     authManager: AuthManager
 ) : AuthenticationBaseViewModel<SettingsUiState, SettingsUiEvent>(
     savedStateHandle = savedStateHandle,
-    initialState = SettingsUiState(),
+    initialState = SettingsUiState(
+        parentName = "Parent Name",
+        parentEmail = "ParentEmail@email.com",
+        parentBabyName = "Parent Baby Name"
+    ),
     authManager = authManager,
     loadingStateUpdater = { state, loadingType -> state.copy(loadingModel = loadingType.toLoadingModel()) }
 ) {
+
     fun logOut() {
         launchAuthenticationNetworkCall(
             action = {

@@ -11,6 +11,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class SettingsUiState(
+    val parentName: String,
+    val parentEmail: String,
+    val parentBabyName: String,
+    val languageLabel: String = "English",
+    val themeLabel: String = "Light",
+    val notificationSelected: Boolean = false,
+    val metricSelected: Boolean = false,
     @IgnoredOnParcel
     override val loadingModel: LoadingModel = LoadingModel.disable,
     @IgnoredOnParcel
