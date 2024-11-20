@@ -36,7 +36,7 @@ data class SnackbarAction(
 fun Snackbar(
     message: String,
     backgroundColor: Color,
-    textColor: Color = DesignTheme.colors.contentWhite,
+    textColor: Color = DesignTheme.colors.contentBackground,
     modifier: Modifier = Modifier,
     action: SnackbarAction? = null,
 ) {
@@ -103,7 +103,7 @@ private fun MessageSnackbarPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF5F5F5)
 @Composable
 private fun ErrorSnackbarPreview() {
-    PreviewTheme(fullScreen = false) {
+    PreviewTheme(fullScreen = false, darkTheme = false) {
         Snackbar(
             modifier = Modifier.padding(top = DesignTheme.spacing.space_xs),
             message = "Error Feedback message",

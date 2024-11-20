@@ -5,12 +5,18 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.view.Window
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
+import com.sambas.fagiollogs.core.design.BaseUiState
+import com.sambas.fagiollogs.core.design.dialog.DialogBase
+import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
+import com.sambas.fagiollogs.core.design.scaffold.LoadingModel
+import com.sambas.fagiollogs.core.design.snackbar.SnackBarGeneric
 
 /**
  * A Composable that provides access to the current [Window].
@@ -30,6 +36,7 @@ fun SetupPreviewWindow(block: Window.() -> Unit) {
 fun PreviewTheme(
     fullScreen: Boolean,
     themeConfig: ThemeConfig = fagiolsThemeConfig,
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     if (fullScreen) {
@@ -41,10 +48,18 @@ fun PreviewTheme(
     CompositionLocalProvider(
         LocalThemeConfig provides themeConfig,
     ) {
-        ComposeDesignTheme(fullScreen = fullScreen) {
-            Box {
-             content()
-            }
+        ComposeDesignTheme(fullScreen = fullScreen, darkTheme = darkTheme) {
+            BaseScaffold(
+                uiState = BaseUiState(
+                    loadingModel = LoadingModel.disable,
+                    error = null,
+                    message = null,
+                    dialog = null,
+                ),
+                content = {
+                    content()
+                }
+            )
         }
     }
 }

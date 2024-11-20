@@ -596,5 +596,6 @@ private fun AnimatedButtonPreview() {
     PreviewTheme(
         fullScreen = true
     ) {
+        DesignButtons.primary.Medium(text = "Button Text") { }
     }
 }

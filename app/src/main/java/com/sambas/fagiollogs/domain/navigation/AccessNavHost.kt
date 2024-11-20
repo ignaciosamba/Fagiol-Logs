@@ -123,6 +123,11 @@ private fun NavGraphBuilder.splashScreen(
                             from = destination,
                             navigationUriWithArgs = AccessNavigationGraph
                                 .LogInScreenDestination.navigationUri(loginArgs),
+                            navOptions = navOptions {
+                                popUpTo(destination) {
+                                    inclusive = true
+                                }
+                            }
                         )
                     }
                 }

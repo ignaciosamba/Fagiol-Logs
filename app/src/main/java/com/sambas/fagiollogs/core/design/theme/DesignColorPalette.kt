@@ -10,6 +10,8 @@ data class DesignColorPalette(
     val secondary: Color,
     val action: Color,
     val contentWhite: Color,
+    val contentDark: Color,
+    val contentDisabled: Color,
     val actionSecondary: Color,
     val actionTertiary: Color,
     val accent: Color,
@@ -23,7 +25,9 @@ data class DesignColorPalette(
     // Neutrals:
     val neutralPrimary: Color,
     val neutralSecondary: Color,
+    val darkNeutralSecondary: Color,
     val neutralTertiary: Color,
+    val darkNeutralTertiary: Color,
     val neutralQuaternary: Color,
     val neutralInversePrimary: Color,
     val neutralInverseSecondary: Color,
@@ -75,26 +79,29 @@ data class DesignColorPalette(
 internal val fagiolsColorPalette by lazy {
     DesignColorPalette(
         primary = Color(0xFF090909),
+        darkPrimary = Color(0xFFFFFFFF),
         secondary = Color(0xFFF7EEEC),
+        darkSecondary = Color(0xFF211F1F),
         action = Color(0xFFEB6600),
         contentWhite = Color(0xFFFFFFFF),
+        contentDark = Color(0xFF151515),
         actionSecondary = Color(0xFFE4B999),
-        actionTertiary = Color(0xFF345676),
-        accent = Color(0xFF00B828),
-        accentSecondary = Color(0xFFCCF1D4),
-        accentTertiary = Color(0xFF002E0A),
+        actionTertiary = Color(0xFF416B96),
+        accent = Color(0xFFFF5B26),
+        accentSecondary = Color(0xFFFDB581),
+        accentTertiary = Color(0xFF5382BE),
         actionPrimaryPressed = Color(0xFFD15B00),
-        actionSecondaryPressed = Color(0xFF9DC9F8),
-        actionSecondaryPressedDark = Color(0xFF16293C),
+        actionSecondaryPressed = Color(0xFFE55323),
+        actionSecondaryPressedDark = Color(0xFFE55323),
         actionTertiaryPressed = Color(0xFF1C4264),
         neutralPrimary = Color(0xFF000000),
-        neutralSecondary = Color(0xFF000000),
-        neutralTertiary = Color(0xFFC8C9CE),
+        neutralSecondary = Color(0xFF525254),
+        darkNeutralSecondary = Color(0xFFEAEAEA),
+        neutralTertiary = Color(0xFFA4A4A8),
+        darkNeutralTertiary = Color(0xFFA4A4A8),
         neutralQuaternary = Color(0xFFFFC7B4),
         neutralInversePrimary = Color(0xFF71777B),
         neutralInverseSecondary = Color(0xFF707072),
-        darkPrimary = Color(0xFF18242E),
-        darkSecondary = Color(0xFF000000),
         darkTertiary = Color(0xFF133354),
         darkQuaternary = Color(0xFF3D4448),
         success = Color(0xFF00CD51),
@@ -124,5 +131,22 @@ internal val fagiolsColorPalette by lazy {
         giallo80 = Color(0xFFFEEC78),
         sbarra = Color(0xFF1D9EFB),
         rosa50 = Color(0xFFF431ED),
+        contentDisabled = Color(0xFFBEBEBE)
     )
+}
+
+object AppColors {
+    val Primary = Color(0xFFEB6600)  // Orange
+    val White = Color(0xFFFFFFFF)
+
+    // Derived colors from Primary
+    val PrimaryLight = Color(0xFFFF8F33)  // Lighter orange
+    val PrimaryDark = Color(0xFFB14600)   // Darker orange
+    val PrimaryContainer = Color(0xFFFFDBCC) // Very light orange for containers
+    val OnPrimary = White
+
+    // Surface colors
+    val Surface = White
+    val OnSurface = Color(0xFF1C1B1F)  // Dark gray for text on white
+    val SurfaceVariant = Color(0xFFF3F3F3)  // Light gray for subtle backgrounds
 }

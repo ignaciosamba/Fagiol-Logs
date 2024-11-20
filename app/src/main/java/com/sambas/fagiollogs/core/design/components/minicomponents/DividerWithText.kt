@@ -1,4 +1,4 @@
-package com.sambas.fagiollogs.core.design.minicomponents
+package com.sambas.fagiollogs.core.design.components.minicomponents
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.sambas.fagiollogs.R
 import com.sambas.fagiollogs.core.design.button.DesignButtons
 import com.sambas.fagiollogs.core.design.button.DesignImageButtons
-import com.sambas.fagiollogs.core.design.minicomponents.DividerWithText
+import com.sambas.fagiollogs.core.design.components.minicomponents.DividerWithText
 import com.sambas.fagiollogs.core.design.scaffold.BaseScaffold
 import com.sambas.fagiollogs.core.design.text.DesignText
 import com.sambas.fagiollogs.core.design.theme.DesignTheme

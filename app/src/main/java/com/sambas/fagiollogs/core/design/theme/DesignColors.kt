@@ -50,7 +50,7 @@ data class DesignColors(
     val contentInverseSecondary: Color,
     val contentAccent: Color,
     val contentProductNext: Color,
-    val contentWhite: Color,
+    val contentBackground: Color,
 
     // Border
     val borderDividerPrimary: Color,
@@ -105,13 +105,13 @@ fun designColorsDark(
     // Background
     backgroundPrimary = palette.darkPrimary,
     backgroundSecondary = palette.darkSecondary,
-    backgroundNavigation = palette.darkPrimary,
+    backgroundNavigation = palette.darkSecondary,
     backgroundActionPrimary = palette.action,
     backgroundActionInversePrimary = palette.secondary,
-    backgroundActionSecondary = palette.darkTertiary,
+    backgroundActionSecondary = palette.actionSecondary,
     backgroundActionInverseSecondary = palette.actionTertiary,
     backgroundActionInverseSecondaryPressed = palette.actionTertiaryPressed,
-    backgroundDisabled = palette.darkQuaternary,
+    backgroundDisabled = palette.contentDisabled,
     backgroundDisabledInverse = palette.neutralInverseSecondary,
     backgroundInversePrimary = palette.secondary,
     backgroundInverseSecondary = palette.darkSecondary,
@@ -119,7 +119,7 @@ fun designColorsDark(
     backgroundActionPrimaryPressed = palette.actionPrimaryPressed,
     backgroundGlass = palette.secondary.copy(alpha = 0.2f),
     backgroundGlassPressed = palette.secondary.copy(alpha = 0.75f),
-    backgroundDialog = palette.primary.copy(alpha = 0.8f),
+    backgroundDialog = palette.contentDark,
     backgroundSuccess = palette.successTertiary,
     backgroundError = palette.errorTertiary,
     backgroundWarning = palette.warningTertiary,
@@ -167,8 +167,8 @@ fun designColorsDark(
 
     // Content
     contentPrimary = palette.secondary,
-    contentSecondary = palette.neutralSecondary,
-    contentTertiary = palette.neutralPrimary,
+    contentSecondary = palette.darkNeutralSecondary,
+    contentTertiary = palette.darkNeutralSecondary,
     contentQuaternary = palette.neutralInversePrimary,
     contentAction = palette.action,
     contentError = palette.error,
@@ -178,13 +178,13 @@ fun designColorsDark(
     contentInverseSecondary = palette.secondary,
     contentAccent = palette.accent,
     contentProductNext = palette.brandProduct1,
-    contentWhite = palette.contentWhite,
+    contentBackground = palette.contentDark,
 
     // Border
     borderDividerPrimary = palette.darkSecondary,
     borderDividerInversePrimary = palette.secondary,
     borderDividerSecondary = palette.darkSecondary,
-    borderDividerTertiary = palette.darkSecondary,
+    borderDividerTertiary = palette.darkNeutralTertiary,
     borderDividerQuaternary = palette.neutralInverseSecondary,
     borderSelectedPrimary = palette.action,
     borderSelectedSecondary = palette.secondary,
@@ -254,7 +254,7 @@ fun designColorsLight(
     backgroundActionPrimaryPressed = palette.actionPrimaryPressed,
     backgroundGlass = palette.secondary.copy(alpha = 0.2f),
     backgroundGlassPressed = palette.secondary.copy(alpha = 0.75f),
-    backgroundDialog = palette.primary.copy(alpha = 0.8f),
+    backgroundDialog = palette.contentWhite,
     backgroundSuccess = palette.successSecondary,
     backgroundError = palette.errorSecondary,
     backgroundWarning = palette.warningSecondary,
@@ -302,7 +302,7 @@ fun designColorsLight(
 
     // Content
     contentPrimary = palette.primary,
-    contentSecondary = palette.neutralPrimary,
+    contentSecondary = palette.neutralSecondary,
     contentTertiary = palette.neutralSecondary,
     contentQuaternary = palette.neutralInversePrimary,
     contentAction = palette.action,
@@ -313,13 +313,13 @@ fun designColorsLight(
     contentInverseSecondary = palette.secondary,
     contentAccent = palette.accent,
     contentProductNext = palette.brandProduct1,
-    contentWhite = palette.contentWhite,
+    contentBackground = palette.contentWhite,
 
     // Border
     borderDividerPrimary = palette.neutralQuaternary,
     borderDividerInversePrimary = palette.secondary,
     borderDividerSecondary = palette.neutralTertiary,
-    borderDividerTertiary = palette.neutralSecondary,
+    borderDividerTertiary = palette.neutralTertiary,
     borderDividerQuaternary = palette.neutralInverseSecondary,
     borderSelectedPrimary = palette.action,
     borderSelectedSecondary = palette.primary,
