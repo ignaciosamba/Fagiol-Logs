@@ -46,7 +46,7 @@ fun Toolbar(
     title: String? = null,
     button: ToolBarButton = ToolBarButton.None,
     actions: @Composable RowScope.() -> Unit = {},
-    backgroundColor: Color = DesignTheme.colors.contentWhite,
+    backgroundColor: Color = DesignTheme.colors.contentBackground,
     contentColor: Color = DesignTheme.colors.contentPrimary
 ) {
     TopAppBar(

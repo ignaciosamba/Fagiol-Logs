@@ -101,8 +101,8 @@ internal fun BottomNavigationBar(
     Box(modifier = modifier) {
         NavigationBar(
             modifier = modifier.height(60.dp),
-            containerColor = DesignTheme.colors.contentWhite,
-            contentColor = DesignTheme.colors.backgroundActionPrimary,
+            containerColor = DesignTheme.colors.contentBackground,
+            contentColor = DesignTheme.colors.contentBackground,
             tonalElevation = DesignTheme.assetDimen.dimen_mini,
         ) {
             BottomNavItem.items.forEach { item ->
@@ -146,7 +146,7 @@ internal fun BottomNavigationBar(
 @Preview
 @Composable
 fun BottomNavigationBarPreview() {
-    PreviewTheme(true) {
+    PreviewTheme(true, darkTheme = true) {
         BottomNavigationBar(
             navController = rememberNavController(),
             onClickTab = { _, _ -> })

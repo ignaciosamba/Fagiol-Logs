@@ -67,8 +67,8 @@ internal fun SettingScreen(
                 ProfileHeader(
                     modifier = Modifier.padding(vertical = DesignTheme.spacing.space_m),
                     profileImage = R.drawable.ic_mum_profile,
-                    name = "Fagiol's mum",
-                    email = "mum.fagiols@example.com",
+                    name = settingsUiState.parentName,
+                    email = settingsUiState.parentEmail,
                     buttonText = "Edit profile",
                     onEditClick = {
                         // Here we can navigate to the edit profile screen
@@ -80,13 +80,21 @@ internal fun SettingScreen(
                     RowToggleSelector(
                         label = stringResource(id = settingItem.text),
                         leftIcon = ImageVector.vectorResource(settingItem.icon),
-                        isChecked = false,
+                        isChecked = when(settingItem) {
+                            SettingsOptions.NOTIFICATION -> settingsUiState.notificationSelected
+                            SettingsOptions.METRIC_SYSTEM -> settingsUiState.metricSelected
+                            else -> false
+                        },
                         onClick = { onToggleClick(settingItem, it) }
                     )
                 } else {
                     RowSelector(
                         label = stringResource(id = settingItem.text),
-                        selectedLanguage = "English",
+                        selectedLanguage = when(settingItem) {
+                            SettingsOptions.LANGUAGE -> settingsUiState.languageLabel
+                            SettingsOptions.THEME -> settingsUiState.themeLabel.text
+                            else -> ""
+                        },
                         leftIcon = ImageVector.vectorResource(settingItem.icon),
                         onClick = { onOptionClick(settingItem) }
                     )
@@ -103,7 +111,11 @@ internal fun SettingScreen(
 private fun SettingScreenPreview() {
     PreviewTheme(true) {
         SettingScreen(
-            settingsUiState = SettingsUiState(),
+            settingsUiState = SettingsUiState(
+                parentName = "Parent Name",
+                parentEmail = "ParentEmail@email.com",
+                babyName = "Parent Baby Name"
+            ),
             onOptionClick = {},
             onLogoutClick = {},
             onToggleClick = { _, _ -> },

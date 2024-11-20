@@ -15,7 +15,8 @@ data class DesignAssetDimen(
     val dimen_xl: Dp,
     val dimen_xxl: Dp,
     val dimen_super: Dp,
-    val dimen_mega: Dp
+    val dimen_mega: Dp,
+    val dimen_mega_xl: Dp
 )
 
 val bigScreenAssetDimen = DesignAssetDimen(
@@ -28,7 +29,8 @@ val bigScreenAssetDimen = DesignAssetDimen(
     dimen_xl = 64.dp,
     dimen_xxl = 80.dp,
     dimen_super = 150.dp,
-    dimen_mega = 240.dp
+    dimen_mega = 240.dp,
+    dimen_mega_xl = 280.dp
 )
 
 val smallScreenAssetDimen = DesignAssetDimen(
@@ -41,5 +43,6 @@ val smallScreenAssetDimen = DesignAssetDimen(
     dimen_xl = 48.dp,
     dimen_xxl = 64.dp,
     dimen_super = 96.dp,
-    dimen_mega = 120.dp
+    dimen_mega = 120.dp,
+    dimen_mega_xl = 160.dp
 )

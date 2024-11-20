@@ -70,10 +70,10 @@ fun RowToggleSelector(
                 },
                 colors = SwitchDefaults.colors(
                     checkedTrackColor = DesignTheme.colors.backgroundActionPrimary,
-                    checkedThumbColor = DesignTheme.colors.contentWhite,
+                    checkedThumbColor = DesignTheme.colors.contentBackground,
                     uncheckedTrackColor = DesignTheme.colors.backgroundDisabled,
                     uncheckedBorderColor = DesignTheme.colors.backgroundDisabled,
-                    uncheckedThumbColor = DesignTheme.colors.contentWhite,
+                    uncheckedThumbColor = DesignTheme.colors.contentBackground,
                 )
             )
         }

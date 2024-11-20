@@ -4,6 +4,7 @@ import android.app.Application
 import com.sambas.fagiollogs.core.autentication.AuthManager
 import com.sambas.fagiollogs.core.design.theme.LocalThemeConfig
 import com.sambas.fagiollogs.core.design.theme.fagiolsThemeConfig
+import com.sambas.fagiollogs.persistant.AppPreferences
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -11,6 +12,8 @@ import javax.inject.Inject
 class FagiolsApplication : Application() {
     @Inject
     lateinit var authManager: AuthManager
+    @Inject
+    lateinit var appPreferences: AppPreferences
 
     override fun onCreate() {
         super.onCreate()

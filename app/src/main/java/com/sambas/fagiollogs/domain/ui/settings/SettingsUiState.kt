@@ -6,6 +6,7 @@ import com.sambas.fagiollogs.core.design.dialog.DialogBase
 import com.sambas.fagiollogs.core.design.error.ErrorBase
 import com.sambas.fagiollogs.core.design.scaffold.LoadingModel
 import com.sambas.fagiollogs.core.design.snackbar.SnackBarGeneric
+import com.sambas.fagiollogs.domain.model.ThemeTypesEnum
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
@@ -13,9 +14,9 @@ import kotlinx.parcelize.Parcelize
 internal data class SettingsUiState(
     val parentName: String,
     val parentEmail: String,
-    val parentBabyName: String,
+    val babyName: String,
     val languageLabel: String = "English",
-    val themeLabel: String = "Light",
+    val themeLabel: ThemeTypesEnum = ThemeTypesEnum.SYSTEM,
     val notificationSelected: Boolean = false,
     val metricSelected: Boolean = false,
     @IgnoredOnParcel

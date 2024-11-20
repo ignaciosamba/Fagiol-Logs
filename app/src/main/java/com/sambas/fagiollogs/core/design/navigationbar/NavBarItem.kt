@@ -53,7 +53,7 @@ internal fun NavBarItem(
 @Preview
 @Composable
 private fun NavBarItemPreview() {
-    PreviewTheme(true) {
+    PreviewTheme(true, darkTheme = true) {
         NavBarItem(
             icon = R.drawable.ic_calendar_minus,
             label = "Home",

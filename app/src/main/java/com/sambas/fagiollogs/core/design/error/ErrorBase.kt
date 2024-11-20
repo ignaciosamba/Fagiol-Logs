@@ -153,7 +153,7 @@ fun FullscreenNetworkErrorBuilder(
     backButtonEnabled: Boolean = true,
 ) = FullscreenError.Builder(
     title = R.string.network_generic_error_title_fullscreen,
-    message = R.string.network_generic_error_text_fullscreen,
+    message = R.string.network_generic_error_text,
     errorAnimation = { DesignTheme.animation.networkError },
     primaryButton = primaryButton,
     secondaryButton = secondaryButton,
@@ -189,7 +189,7 @@ fun FullscreenGenericErrorBuilder(
     backButtonEnabled: Boolean = true,
 ) = FullscreenError.Builder(
     title = R.string.generic_error_title_fullscreen,
-    message = R.string.generic_error_text_fullscreen,
+    message = R.string.generic_error_text,
     errorAnimation = { DesignTheme.animation.genericError },
     primaryButton = primaryButton,
     secondaryButton = secondaryButton,
@@ -266,6 +266,11 @@ class SnackbarError private constructor(
 }
 
 /**
- * A [SnackbarError.Builder] for generic errors.
+ * A [SnackbarError.Builder] for generic error.
  */
-val SnackbarGenericErrorBuilder = SnackbarError.Builder(R.string.generic_error_text_fullscreen)
+val SnackbarGenericErrorBuilder = SnackbarError.Builder(R.string.generic_error_text)
+
+/**
+ * A [SnackbarError.Builder] for generic no connection error.
+ */
+val SnackbarNoConnectionGenericErrorBuilder = SnackbarError.Builder(R.string.network_generic_error_text)

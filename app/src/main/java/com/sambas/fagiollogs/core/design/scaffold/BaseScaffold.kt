@@ -28,7 +28,7 @@ fun BaseScaffold(
             hostState
         )
     },
-    backgroundColor: Color = DesignTheme.colors.contentWhite,
+    backgroundColor: Color = DesignTheme.colors.contentBackground,
     contentColor: Color = DesignTheme.colors.contentPrimary,
     loaderAsDialog: Boolean = false,
     contentWindowInsets: WindowInsets = WindowInsets(0),

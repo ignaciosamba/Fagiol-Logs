@@ -90,7 +90,7 @@ class RegisterViewModel @Inject constructor(
                         }
                         onNewError(errorMessage?.let { message ->
                             SnackbarError.Builder(message)
-                        } ?: SnackbarError.Builder(R.string.generic_error_text_fullscreen))
+                        } ?: SnackbarError.Builder(R.string.generic_error_text))
                     }
                 }
             }
@@ -157,7 +157,6 @@ class RegisterViewModel @Inject constructor(
 
     fun saveNewUserToFirestore() {
         val userId = authManager.getCurrentUser()?.uid.orEmpty()
-        Log.d("SAMBA1", "userId: $userId")
         val data = hashMapOf(
             "userId" to userId,
             "name" to authManager.getCurrentUser()?.displayName.orEmpty(),
