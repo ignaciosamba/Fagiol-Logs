@@ -12,7 +12,7 @@ plugins {
 
 android {
     namespace = "com.sambas.fagiollogs"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.sambas.fagiollogs"
@@ -25,7 +25,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        consumerProguardFiles "navigation-compose.pro"
     }
 
     buildTypes {

@@ -65,9 +65,17 @@ class LoginViewModel @Inject constructor(
     fun initiateGoogleSignIn() {
         launchAuthenticationNetworkCall(
             action = {
+                // Get the Web Client ID from AndroidManifest meta-data
+                val appInfo = context.packageManager.getApplicationInfo(
+                    context.packageName,
+                    android.content.pm.PackageManager.GET_META_DATA
+                )
+                val clientId = appInfo.metaData?.getString("google_sign_in_client_id")
+                    ?: throw Exception("Google Sign-In client ID not configured in AndroidManifest")
+
                 // Get the credential using Credential Manager
                 val googleCredential = googleSignInHelper.initiateGoogleSignIn(
-                    clientId = "${context.getString(R.string.gcm_defaultSenderId)}-bamh93m5u9uao71svs4g16ansghe63vk.apps.googleusercontent.com"
+                    clientId = clientId
                 )
 
                 // Create Firebase credential

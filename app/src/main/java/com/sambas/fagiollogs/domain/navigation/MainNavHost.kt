@@ -1,9 +1,9 @@
 package com.sambas.fagiollogs.domain.navigation
 
 import NavHost
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,9 +24,7 @@ import com.sambas.fagiollogs.domain.ui.landing.LandingScreen
 import com.sambas.fagiollogs.domain.ui.settings.SettingScreen
 import com.sambas.fagiollogs.domain.ui.settings.SettingViewModel
 import com.sambas.fagiollogs.domain.ui.settings.SettingsUiEvent
-import com.sambas.fagiollogs.domain.ui.settings.SettingsUiState
 import com.sambas.fagiollogs.domain.ui.landing.LandingViewModel
-import com.sambas.fagiollogs.domain.ui.settings.SettingsOptions
 
 @Composable
 internal fun MainNavHost(
@@ -38,7 +36,9 @@ internal fun MainNavHost(
     val navController = rememberNavControllerWithLogger()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize().navigationBarsPadding(),
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding(),
         bottomBar = {
             BottomNavigationBar(
                 navController = navController,
@@ -88,7 +88,7 @@ internal fun MainNavHost(
         NavHost(
             navController = navController,
             graph = MainNavigationGraph,
-            modifier = modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize().padding(paddingValues = paddingValues)
         ) {
             navigation(graph = MainNavigationGraph) {
                 for (destination in MainNavigationGraph.destinations) {
@@ -147,7 +147,11 @@ private fun NavGraphBuilder.statsScreen(
 ) {
     composable(destination) {
         // Will be StatsScreen()
-        LandingScreen(text = "STATS")
+        LandingScreen(
+            onAddEventClick = {},
+            onEventItemClick = {},
+
+            )
     }
 }
 

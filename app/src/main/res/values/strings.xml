@@ -22,6 +22,10 @@
     <string name="create_account">Create an account</string>
     <string name="reset_password_email_sent">We have sent you an email to reset your password</string>
 
+    <!-- Google Sign-In Configuration -->
+    <!-- Web Client ID from Firebase Console (client_type: 3 in google-services.json) -->
+    <string name="google_web_client_id">727996694289-bamh93m5u9uao71svs4g16ansghe63vk.apps.googleusercontent.com</string>
+
 
     <!-- Register -->
     <string name="not_matching_password_error">The passwords do not match</string>

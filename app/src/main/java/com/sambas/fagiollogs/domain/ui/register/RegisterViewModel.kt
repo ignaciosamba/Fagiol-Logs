@@ -36,19 +36,22 @@ class RegisterViewModel @Inject constructor(
 ) {
 
 
-
     fun registerUser(name: String, email: String, password: String) {
         launchAuthenticationNetworkCall(
             action = {
-                if(name.isNotBlank()) {
+                if (name.isNotBlank()) {
                     // Register the user and password.
                     val result = auth.createUserWithEmailAndPassword(email, password).await()
                     // Update the user's profile with the provided name.
-                    val profileUpdate = UserProfileChangeRequest.Builder()
-                        .setDisplayName(name)
-                        .build()
-                    result.user?.updateProfile(profileUpdate)?.await()
-                    result
+                    // It's good practice to ensure the user object is not null
+                    result.user?.let { firebaseUser ->
+                        val profileUpdate = UserProfileChangeRequest.Builder()
+                            .setDisplayName(name)
+                            .build()
+                        firebaseUser.updateProfile(profileUpdate).await()
+                    }
+                        ?: throw IllegalStateException("User was null after creation, this should not happen.")
+                    result // Return the AuthResult
                 } else {
                     setState {
                         it.copy(errorUserName = true)
@@ -59,15 +62,16 @@ class RegisterViewModel @Inject constructor(
             onSuccess = {
                 setState { state ->
                     state.copy(
-                        errorEmail = true,
+                        // Review: If registration is successful, errors should typically be cleared.
+                        // errorEmail = true, // This line might need review based on your logic
                         errorPassword = null,
                         errorRepeatedPassword = false
                     )
                 }
                 emitEvent(RegisterUiEvent.RegistrationSuccess)
             },
-            onError = {
-                when (it) {
+            onError = { exception ->
+                when (exception) {
                     is PasswordNotMatchingException -> {
                         onNewError(SnackbarError.Builder(R.string.not_matching_password_error))
                     }
@@ -82,7 +86,8 @@ class RegisterViewModel @Inject constructor(
                     }
 
                     else -> {
-                        val errorMessage = extractPasswordRequirementsFromFirebase(it.localizedMessage)
+                        val errorMessage =
+                            extractPasswordRequirementsFromFirebase(exception.localizedMessage)
                         setState { state ->
                             state.copy(
                                 errorPassword = errorMessage
@@ -156,19 +161,41 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun saveNewUserToFirestore() {
-        val userId = authManager.getCurrentUser()?.uid.orEmpty()
-        val data = hashMapOf(
-            "userId" to userId,
-            "name" to authManager.getCurrentUser()?.displayName.orEmpty(),
-            "email" to authManager.getCurrentUser()?.email.orEmpty(),
-            "timestamp" to FieldValue.serverTimestamp()
-        )
+        // Assuming launchAuthenticationNetworkCall handles loading states and general error scenarios
+        launchAuthenticationNetworkCall(
+            action = {
+                val userId = authManager.getCurrentUser()?.uid
+                if (userId.isNullOrEmpty()) {
+                    Log.w(TAG, "User ID is null or empty, cannot save to Firestore.")
+                    // This throw will be caught by onError in launchAuthenticationNetworkCall
+                    throw IllegalStateException("User ID not available to save user data.")
+                }
 
-        firestore.collection("users")
-            .document(userId)
-            .set(data, SetOptions.merge())
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.d(TAG, "Error writing document", e) }
+                val currentUser = authManager.getCurrentUser() // Get user once
+                val data = hashMapOf(
+                    "userId" to userId,
+                    "name" to currentUser?.displayName.orEmpty(),
+                    "email" to currentUser?.email.orEmpty(),
+                    "timestamp" to FieldValue.serverTimestamp()
+                )
+
+                firestore.collection("users")
+                    .document(userId)
+                    .set(data, SetOptions.merge())
+                    .await() // Wait for the operation to complete
+
+                Log.d(TAG, "DocumentSnapshot successfully written for user ID: $userId")
+                // Return Unit or any relevant result if your launchAuthenticationNetworkCall expects it
+            },
+            onSuccess = {
+                Log.d(TAG, "Successfully saved new user to Firestore.")
+                // Emit an event or update UI state here if needed
+            },
+            onError = { exception ->
+                Log.e(TAG, "Error writing document to Firestore", exception)
+                onNewError(SnackbarError.Builder(R.string.generic_error_text))
+            }
+        )
     }
 
     /**
